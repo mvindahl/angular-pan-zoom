@@ -1,0 +1,22 @@
+// Ref: http://www.jshint.com/docs/options/
+{
+	"camelcase": true,
+	"curly": true,
+	"forin": true,
+	"freeze": true,
+	"immed": true,
+	"latedef": true,
+	"newcap": true,
+	"noarg": true,
+	"nonbsp": true,
+	"quotmark": "single",
+	"undef": true,
+	"unused": true,
+	"trailing": true,
+	"maxparams": 4,
+	"maxdepth": 2,
+	"maxlen": 160,
+
+	"jquery": true
+}
+// Candidates: "eqeqeq", "strict"
