@@ -60,17 +60,36 @@ This will provide zoom and pan functionality using default settings. It will, ho
 
 ### Using the provided zoom pan widget
 
-To use the provided <panzoomwidget>, you need to
+To use the provided `<panzoomwidget>`, you need to
 - include scripts/directives/panzoomwidget.js and css/panzoomwidget.css on your page
 - make your AngularJS module depend upon the panzoomwidget module
-- use the <panzoomwidget> directive in the markup, passing the same config and model that you passed to <panzoom>
+- use the `<panzoomwidget>` directive in the markup, passing the same config and model that you passed to `<panzoom>`
 You will probably also want to position the widget above the zoomed contents be means of CSS. Check ./test.html for a working example.
 
 ### Implementing your own external controls
 
 Refer to panzoomwidget.js for an example of how this may be done. Whether or not you create it as a directive is up to you.
-The main thing to know is that once you have passed the model object to the <panzoom> directive, it will contain
-methods zoomIn() and zoomOut() which do pretty much what you would expect them to do.
+The main thing to know is that once you have passed the model object to the `<panzoom>` directive, it will contain
+methods `zoomIn()` and `zoomOut()` which do pretty much what you would expect them to do.
+
+The config object:
+------------------
+May be used to pass configuration options to the panzoom directive. The directive will fill
+in any "blanks" with default values.
+
+For a list of configuration keys and values you may inspect the object one you get it back.
+
+The config object is not intended to be modified once initialized.
+
+[TBD: List options and explanations here]
+
+The model object:
+-----------------
+When initializing, you should pass an empty object. The directive will initialize the object.
+You can read the current zoom and pan state at any time from this object, and you can
+invoke attached methods to manipulate state.
+
+[TBD: Document this simple API]
 
 Minified version:
 -----------------
