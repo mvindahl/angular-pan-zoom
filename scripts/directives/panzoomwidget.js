@@ -1,3 +1,7 @@
+/*
+ * Ref: https://github.com/mvindahl/angular-pan-zoom
+ */
+
 /*global angular:false */
 /*global setInterval:false */
 

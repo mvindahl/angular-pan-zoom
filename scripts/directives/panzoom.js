@@ -1,3 +1,7 @@
+/*
+ * Ref: https://github.com/mvindahl/angular-pan-zoom
+ */
+
 /*global angular:false */
 
 //FIXME we should stop spelling out the full path in the model at all times when declaring a local variable would improve readbility.

@@ -109,6 +109,7 @@ and please make sure that the code passes jshint. The rules are not overly Nazi.
 
 [TBD: Unit tests are an obvious omission at this point]
 
+[TBD: We also need to think in terms of versioning and releases. Currently there's just the bleeding edge version.]
 
 
 
