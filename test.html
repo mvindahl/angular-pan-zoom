@@ -4,15 +4,13 @@
     <style type="text/css">
 		.pan-zoom-frame {
 		    border: 2px solid black;
-		    width: 800px;
-		    height: 600px;
 		}
     </style>
   </head>
   <body ng-controller="TestController">
      <div style="position:relative">
        <panzoomwidget config="panzoomConfig" model="panzoomModel" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
-       <panzoom config="panzoomConfig" model="panzoomModel">
+       <panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px">
           <img src="images/shark_attack.jpg"/>
        </panzoom>
      </div>

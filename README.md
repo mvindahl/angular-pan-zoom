@@ -43,7 +43,7 @@ In your markup:
 <body>
   ..
   <!-- create panzoom, passing models from controller -->
-  <panzoom config="config" model="model">
+  <panzoom config="config" model="model" style="width:800px; height: 600px">
     <!-- your content here -->
   </panzoom>
   ..
