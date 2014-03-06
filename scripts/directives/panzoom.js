@@ -283,7 +283,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			$scope.onMouseleave = function() {
 				$scope.onMouseup(); // same behaviour
-			}
+			};
 
 			$scope.onMouseWheel = function($event, $delta, $deltaX, $deltaY) {
 				$event.preventDefault();
@@ -305,7 +305,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 		},
 		template:
 			'<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)" ng-mousemove="onMousemove($event)"' +
-				' ng-mouseup="onMouseup($event)" ng-mouseleave="onMouseleave($event)" msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)" style="position:relative;overflow:hidden">' +
+				' ng-mouseup="onMouseup($event)" ng-mouseleave="onMouseleave($event)" msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
+				' style="position:relative;overflow:hidden">' +
 				'<div class="pan-zoom-contents" style="position:absolute;left:0px;top:0px" ng-transclude>' +
 					// transcluded contents will be inserted here
 				'</div>' +
