@@ -114,7 +114,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				//
 				// And conversely:
 				//
-				//  p = (1/s)(p - t)
+				//  p = (1/s)(p' - t)
 				//
 				// Now use subscription 0 to denote the value before transform and zoom and let 1 denote the value after transform. Scale
 				// changes from s0 to s1. Translation changes from t0 to t1. But keep p and p' fixed so that the view coordinate p' still
@@ -168,6 +168,32 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 						clickPoint);
 			};
 			$scope.model.zoomOut = zoomOut;
+
+			var getViewPosition = function(modelPosition) {
+				//  p' = p * s + t
+				var p = modelPosition;
+				var s = getCssScale($scope.base.zoomLevel);
+				var t = $scope.base.pan;
+
+				return {
+					x : p.x*s + t.x,
+					y : p.y*s + t.y
+				};
+			};
+			$scope.model.getViewPosition = getViewPosition;
+
+			var getModelPosition = function(viewPosition) {
+				//  p = (1/s)(p' - t)
+				var pmark = viewPosition;
+				var s = getCssScale($scope.base.zoomLevel);
+				var t = $scope.base.pan;
+
+				return {
+					x : (1/s)*(pmark.x - t.x),
+					y : (1/s)*(pmark.y - t.y)
+				};
+			};
+			$scope.model.getModelPosition = getModelPosition;
 
 			var length = function(vector2d) {
 				return Math.sqrt(vector2d.x*vector2d.x + vector2d.y*vector2d.y);
