@@ -1,5 +1,3 @@
-/*global angular:false */
-
 angular.module('test', ['panzoom', 'panzoomwidget'])
 
 .controller('TestController', ['$scope',

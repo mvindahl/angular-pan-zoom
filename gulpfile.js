@@ -18,8 +18,12 @@ var stylish = require('jshint-stylish');
 
 gulp.task('default', function(){
 	gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js'])
-    .pipe(uglify())
-    .pipe(concat('panzoom.min.js'))
+    .pipe(uglify({ preserveComments: 'some' }))
+    .pipe(concat('panzoom.0.1-snapshot.min.js'))
+    .pipe(gulp.dest('./build'));
+
+	gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js'])
+    .pipe(concat('panzoom.0.1-snapshot.js'))
     .pipe(gulp.dest('./build'));
 });
 
