@@ -14,7 +14,7 @@ angular.module('panzoomwidget', [])
 			config: '=',
 			model: '='
 		},
-		controller: function($scope, $element) {
+		controller: ['$scope', '$element', function($scope, $element) {
 //			console.log('init panzoomwidget.js');
 
 			var zoomSliderWidget = $element.find('.zoom-slider-widget');
@@ -43,7 +43,7 @@ angular.module('panzoomwidget', [])
 			setInterval(function() {
 				zoomSliderWidget.css('top', (($scope.config.zoomLevels - $scope.model.zoomLevel - 1) * $scope.widgetConfig.zoomLevelHeight) + 'px');
 			}, 25);
-		},
+		}],
 		template:
 			'<div class="panzoomwidget">' +
 				'<div ng-click="zoomIn()" class="zoom-button zoom-button-in">+</div>' +

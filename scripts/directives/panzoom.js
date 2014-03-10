@@ -16,7 +16,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			config: '=',
 			model: '='
 		},
-		controller: function($scope, $element) {
+		controller: ['$scope', '$element', function($scope, $element) {
 			// initialize models. Use passed properties when available, otherwise revert to defaults
 			// NOTE: all times specified in seconds, all distances specified in pixels
 
@@ -328,7 +328,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 					zoomOut(clickPoint);
 				}
 			};
-		},
+		}],
 		template:
 			'<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)" ng-mousemove="onMousemove($event)"' +
 				' ng-mouseup="onMouseup($event)" ng-mouseleave="onMouseleave($event)" msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
