@@ -18,34 +18,76 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			model: '='
 		},
 		controller: ['$scope', '$element', function($scope, $element) {
+			var frameElement = $element;
+			var contentElement = $element.find('.pan-zoom-contents');
+
+			var getCssScale = function(zoomLevel) {
+				return Math.pow($scope.config.scalePerZoomLevel, zoomLevel - $scope.config.neutralZoomLevel);
+			};
+
+			var getZoomLevel = function(cssScale) {
+				return Math.log(cssScale)/Math.log($scope.config.scalePerZoomLevel) + $scope.config.neutralZoomLevel;
+			};
+
 			// initialize models. Use passed properties when available, otherwise revert to defaults
 			// NOTE: all times specified in seconds, all distances specified in pixels
 
 			$scope.config.zoomLevels = $scope.config.zoomLevels || 5;
 			$scope.config.neutralZoomLevel = $scope.config.neutralZoomLevel || 2;
-			$scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
-			$scope.config.initialPanX = $scope.config.initialPanX || 0;
-			$scope.config.initialPanY = $scope.config.initialPanY || 0;
 			$scope.config.friction = $scope.config.friction || 10.0;
 			$scope.config.haltSpeed = $scope.config.haltSpeed || 100.0;
 			$scope.config.scalePerZoomLevel = $scope.config.scalePerZoomLevel || 2;
 			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
 			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
 			$scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function() {};
+			$scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
 
-			$scope.base = {
-					zoomLevel : $scope.config.initialZoomLevel,
-					pan : {
-						x : $scope.config.initialPanX,
-						y : $scope.config.initialPanY
-					}
+			$scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
+			$scope.config.initialPanX = $scope.config.initialPanX || 0;
+			$scope.config.initialPanY = $scope.config.initialPanY || 0;
+
+			var calcZoomToFit = function(rect) {
+				// let (W, H) denote the size of the viewport
+				// let (w, h) denote the size of the rectangle to zoom to
+				// then we must CSS scale by the min of W/w and H/h in order to just fit the rectangle
+
+				var W = $element.width();
+				var H = $element.height();
+				var w = rect.width;
+				var h = rect.height;
+
+				var cssScaleExact = Math.min(W/w, H/h);
+				var zoomLevelExact = getZoomLevel(cssScaleExact);
+				var zoomLevel = zoomLevelExact*$scope.config.zoomToFitZoomLevelFactor;
+				var cssScale = getCssScale(zoomLevel);
+
+				return {
+						zoomLevel : zoomLevel,
+						pan : {
+							x : -rect.x * cssScale + (W - w*cssScale)/2,
+							y : -rect.y * cssScale + (H - h*cssScale)/2
+						}
+				};
 			};
+
+			if ($scope.config.initialZoomToFit) {
+				$scope.base = calcZoomToFit($scope.config.initialZoomToFit);
+			} else {
+				$scope.base = {
+						zoomLevel : $scope.config.initialZoomLevel,
+						pan : {
+							x : $scope.config.initialPanX,
+							y : $scope.config.initialPanY
+						}
+				};
+			}
 
 			$scope.model.zoomLevel = $scope.base.zoomLevel;
 			$scope.model.pan = {
 					x : $scope.base.pan.x,
 					y : $scope.base.pan.y
 			};
+
 
 			// FIXME why declare these on $scope? They could be private vars
 			$scope.previousPosition = undefined;
@@ -54,13 +96,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			$scope.zoomAnimation = undefined;
 
 			// private
-
-			var getCssScale = function(zoomLevel) {
-				return Math.pow($scope.config.scalePerZoomLevel, zoomLevel - $scope.config.neutralZoomLevel);
-			};
-
-			var frameElement = $element;
-			var contentElement = $element.find('.pan-zoom-contents');
 
 			var syncModelToDOM = function() {
 				if ($scope.zoomAnimation) {
@@ -202,6 +237,13 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			};
 			$scope.model.getModelPosition = getModelPosition;
 
+			var zoomToFit = function(rectangle) {
+				// example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
+				$scope.base = calcZoomToFit(rectangle);
+
+			};
+			$scope.model.zoomToFit = zoomToFit;
+
 			var length = function(vector2d) {
 				return Math.sqrt(vector2d.x*vector2d.x + vector2d.y*vector2d.y);
 			};
@@ -246,9 +288,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 						if (speed < $scope.config.haltSpeed) {
 							$scope.panVelocity = undefined;
-						}
 
-						$scope.config.modelChangedCallback($scope.model);
+							$scope.config.modelChangedCallback($scope.model);
+						}
 					}
 
 					syncModelToDOM();
