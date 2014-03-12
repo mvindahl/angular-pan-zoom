@@ -96,7 +96,11 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			var changeZoomLevel = function(newZoomLevel, clickPoint) {
 				if ($scope.zoomAnimation) {
-					return;
+					$scope.base.zoomLevel = $scope.model.zoomLevel;
+					$scope.base.pan.x = $scope.model.pan.x;
+					$scope.base.pan.y = $scope.model.pan.y;
+
+					$scope.zoomAnimation = undefined;
 				}
 
 				newZoomLevel = Math.max(0, newZoomLevel);
