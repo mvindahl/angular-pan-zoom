@@ -397,7 +397,7 @@ angular.module('panzoomwidget', [])
 .directive('panzoomwidget', function() {
 	return {
 		restrict: 'E',
-		transclude: false,
+		transclude: true,
 		scope: {
 			config: '=',
 			model: '='
@@ -462,6 +462,7 @@ angular.module('panzoomwidget', [])
 					' class="zoom-level zoom-level-{{zoomLevel}}" style="height:{{widgetConfig.zoomLevelHeight - 2}}px"></div>' +
 				'</div>' +
 				'<div ng-click="zoomOut()" ng-mouseenter="zoomToLevelIfDragging(0)" class="zoom-button zoom-button-out">-</div>' +
+				'<div ng-transclude></div>' +
 			'</div>',
 		replace: true
 	};
