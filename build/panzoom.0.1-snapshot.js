@@ -30,6 +30,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			$scope.config.haltSpeed = $scope.config.haltSpeed || 100.0;
 			$scope.config.scalePerZoomLevel = $scope.config.scalePerZoomLevel || 2;
 			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
+			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
+			$scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function() {};
 
 			$scope.base = {
 					zoomLevel : $scope.config.initialZoomLevel,
@@ -224,6 +226,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 							$scope.base.pan.y = $scope.model.pan.y;
 
 							$scope.zoomAnimation = undefined;
+
+							$scope.config.modelChangedCallback($scope.model);
 						}
 					}
 
@@ -239,6 +243,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 						if (speed < $scope.config.haltSpeed) {
 							$scope.panVelocity = undefined;
 						}
+
+						$scope.config.modelChangedCallback($scope.model);
 					}
 
 					syncModelToDOM();
