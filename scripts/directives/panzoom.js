@@ -138,6 +138,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 					$scope.zoomAnimation = undefined;
 				}
 
+				// keep in bounds
 				newZoomLevel = Math.max(0, newZoomLevel);
 				newZoomLevel = Math.min($scope.config.zoomLevels - 1, newZoomLevel);
 
@@ -199,14 +200,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			var zoomIn = function(clickPoint) {
 				changeZoomLevel(
-						Math.floor($scope.base.zoomLevel + 1.0),
+						$scope.base.zoomLevel + 1.0,
 						clickPoint);
 			};
 			$scope.model.zoomIn = zoomIn;
 
 			var zoomOut = function(clickPoint) {
 				changeZoomLevel(
-						Math.ceil($scope.base.zoomLevel - 1.0),
+						$scope.base.zoomLevel - 1.0,
 						clickPoint);
 			};
 			$scope.model.zoomOut = zoomOut;

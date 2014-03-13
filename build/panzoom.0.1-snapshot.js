@@ -138,6 +138,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 					$scope.zoomAnimation = undefined;
 				}
 
+				// keep in bounds
 				newZoomLevel = Math.max(0, newZoomLevel);
 				newZoomLevel = Math.min($scope.config.zoomLevels - 1, newZoomLevel);
 
@@ -199,14 +200,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			var zoomIn = function(clickPoint) {
 				changeZoomLevel(
-						Math.floor($scope.base.zoomLevel + 1.0),
+						$scope.base.zoomLevel + 1.0,
 						clickPoint);
 			};
 			$scope.model.zoomIn = zoomIn;
 
 			var zoomOut = function(clickPoint) {
 				changeZoomLevel(
-						Math.ceil($scope.base.zoomLevel - 1.0),
+						$scope.base.zoomLevel - 1.0,
 						clickPoint);
 			};
 			$scope.model.zoomOut = zoomOut;
@@ -406,6 +407,19 @@ angular.module('panzoomwidget', [])
 			var zoomSliderWidget = $element.find('.zoom-slider-widget');
 			var isDragging = false;
 
+			var sliderWidgetTopFromZoomLevel = function(zoomLevel) {
+				return (($scope.config.zoomLevels - zoomLevel - 1) * $scope.widgetConfig.zoomLevelHeight);
+			};
+
+			var zoomLevelFromSliderWidgetTop = function(sliderWidgetTop) {
+				return $scope.config.zoomLevels - 1 - sliderWidgetTop/$scope.widgetConfig.zoomLevelHeight;
+			};
+
+			var getZoomLevelForMousePoint = function($event) {
+				var sliderWidgetTop = $event.pageY - $element.find('.zoom-slider').offset().top - $scope.widgetConfig.zoomLevelHeight/2;
+				return zoomLevelFromSliderWidgetTop(sliderWidgetTop);
+			};
+
 			$scope.getZoomLevels = function() {
 				var zoomLevels = [];
 				for (var i = $scope.config.zoomLevels - 1; i >= 0; i--) {
@@ -426,16 +440,18 @@ angular.module('panzoomwidget', [])
 				$scope.model.zoomOut();
 			};
 
-			$scope.zoomToLevel = function(level) {
-				$scope.model.changeZoomLevel(level);
+			$scope.onClick = function($event) {
+				var zoomLevel = getZoomLevelForMousePoint($event);
+				$scope.model.changeZoomLevel(zoomLevel);
 			};
 
 			$scope.onMousedown = function() {
 				isDragging = true;
 			};
 
-			$scope.zoomToLevelIfDragging = function(zoomLevel) {
+			$scope.onMousemove = function($event) {
 				if (isDragging) {
+					var zoomLevel = getZoomLevelForMousePoint($event);
 					$scope.model.changeZoomLevel(zoomLevel);
 				}
 			};
@@ -450,16 +466,17 @@ angular.module('panzoomwidget', [])
 
 			// $watch is not fast enough so we set up our own polling
 			setInterval(function() {
-				zoomSliderWidget.css('top', (($scope.config.zoomLevels - $scope.model.zoomLevel - 1) * $scope.widgetConfig.zoomLevelHeight) + 'px');
+				zoomSliderWidget.css('top', sliderWidgetTopFromZoomLevel($scope.model.zoomLevel) + 'px');
 			}, 25);
 		}],
 		template:
 			'<div class="panzoomwidget" ng-mouseleave="onMouseleave()">' +
 				'<div ng-click="zoomIn()" ng-mouseenter="zoomToLevelIfDragging(config.zoomLevels - 1)" class="zoom-button zoom-button-in">+</div>' +
-				'<div class="zoom-slider" ng-mousedown="onMousedown()" ng-mouseup="onMouseup()">' +
+				'<div class="zoom-slider" ng-mousedown="onMousedown()" ng-mouseup="onMouseup()" ' +
+						'ng-mousemove="onMousemove($event)" ng-click="onClick($event)">' +
 					'<div class="zoom-slider-widget" style="height:{{widgetConfig.zoomLevelHeight - 2}}px"></div>' +
-					'<div ng-repeat="zoomLevel in getZoomLevels()" ng-mouseenter="zoomToLevelIfDragging(zoomLevel)" ng-click="zoomToLevel(zoomLevel)"' +
-					' class="zoom-level zoom-level-{{zoomLevel}}" style="height:{{widgetConfig.zoomLevelHeight - 2}}px"></div>' +
+					'<div ng-repeat="zoomLevel in getZoomLevels()" "' +
+					' class="zoom-level zoom-level-{{zoomLevel}}" style="height:{{widgetConfig.zoomLevelHeight}}px"></div>' +
 				'</div>' +
 				'<div ng-click="zoomOut()" ng-mouseenter="zoomToLevelIfDragging(0)" class="zoom-button zoom-button-out">-</div>' +
 				'<div ng-transclude></div>' +

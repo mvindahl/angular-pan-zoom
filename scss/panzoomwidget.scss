@@ -28,10 +28,8 @@
 
     .zoom-level {
         width: 100%;
-        background-color: rgba(255,255,255,0.1);
-        border: 1px solid rgba(0,0,0,0.1);
-        -webkit-border-radius: 2px;
-        -moz-border-radius: 2px;
+        border-left: 2px solid black;
+        margin-left: 10px;
     }
 
     .zoom-slider {

@@ -5,7 +5,7 @@ AngularJS directive for implementing pan and zoom on any DOM element
 
 Features:
 ---------
-- Zoom between discrete zoom levels using mouse wheel, double click, or control widget
+- Zoom using mouse wheel, double click, or control widget
 - Pan using click and drag. When releasing mouse button while panning, the pan will come to a gradual stop.
 - AngularJS integrated. Models are used as APIs for communicating
 - Widget with zoom controls provided. Use this or design your own controls if you so prefer.
