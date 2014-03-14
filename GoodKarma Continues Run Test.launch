@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.nodeclipse.debug.launch.LaunchConfigurationType">
+<stringAttribute key="attr_program_arguments" value="continues-run-test"/>
+<stringAttribute key="attr_working_directory" value="${workspace_loc:/angular-pan-zoom}"/>
+<stringAttribute key="bad_container_name" value="/com.se.liferay.operations-portletGoodKarma"/>
+<stringAttribute key="key_file_path" value="/angular-pan-zoom/node_modules/.bin/gulp"/>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+</launchConfiguration>

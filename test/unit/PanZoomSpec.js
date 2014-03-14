@@ -1,5 +1,6 @@
 describe('PanZoom specs', function() {
 	var $scope = null;
+	var compile = null;
 	var shark = { x : 391, y: 371, width: 206, height: 136 };
 	var chopper = { x : 88, y: 213, width: 660, height: 144 };
 	var ladder = { x : 333, y: 325, width: 75, height: 200 };
@@ -8,6 +9,7 @@ describe('PanZoom specs', function() {
 	beforeEach(module('testApp'))
 	beforeEach(inject(function($rootScope, $compile) {
 		$scope = $rootScope;
+		compile = $compile;
 		element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>');
 
 		$scope.rects = [ chopper, shark, ladder ];
@@ -27,11 +29,18 @@ describe('PanZoom specs', function() {
 		// contain methods for manipulating this state.
 		$scope.panzoomModel = {};
 
-		$compile(element)($scope);
 	}));
 
 	it('directive should work', function() {
+		compile(element)($scope);
 		$scope.$digest();
 		expect(element.html()).toBe('<div class="pan-zoom-contents" style="position: absolute; -webkit-transform-origin-x: 0px; -webkit-transform-origin-y: 0px; -webkit-transform: scale(3.2789803458800524); left: -1219.8162908647457px; top: -1139.472371841343px; " ng-transclude=""></div>');
+	});
+
+	it('directive should work diffently with neutral zoom level of 1', function() {
+		$scope.panzoomConfig.neutralZoomLevel = 1;
+		compile(element)($scope);
+		$scope.$digest();
+		expect(element.html()).toBe('<div class="pan-zoom-contents" style="position: absolute; -webkit-transform-origin-x: 0px; -webkit-transform-origin-y: 0px; -webkit-transform: scale(3.5559616234189844); left: -1356.6450419689784px; top: -1261.0671526809342px; " ng-transclude=""></div>');
 	});
 });

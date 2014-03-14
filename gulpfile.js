@@ -62,6 +62,19 @@ gulp.task('test', function() {
     });
 });
 
+gulp.task('continues-run-test', function() {
+	  // Be sure to return the stream
+	  return gulp.src(testFiles)
+	    .pipe(karma({
+	      configFile: 'test/karma.continuesrun.conf.js',
+	      action: 'run'
+	    }))
+	    .on('error', function(err) {
+	      // Make sure failed tests cause gulp to exit non-zero
+	      throw err;
+	    });
+	});
+
 gulp.task('coverage', function() {
   // Be sure to return the stream
   return gulp.src(testFiles)
