@@ -10,15 +10,16 @@
     "gulp-karma": "~0.0.4",
     "jshint-stylish": "~0.1.5",
     "gulp-sass": "~0.7.1",
-    "karma" : "~0.10",
-    "karma-junit-reporter" : "~0.1",
+    "karma": "~0.12.0",
+    "karma-junit-reporter": "~0.2.1",
     "karma-coverage": "~0.1.0",
-    "karma-jasmine" : "~0.1",
-    "karma-ng-scenario" : "~0.1",
+    "karma-jasmine": "~0.1",
+    "karma-ng-scenario": "~0.1",
     "karma-safari-launcher": "~0.1",
     "karma-firefox-launcher": "~0.1",
-	"karma-phantomjs-launcher": "~0.1",
-	"karma-chrome-launcher": "~0.1"
+    "karma-phantomjs-launcher": "~0.1",
+    "karma-chrome-launcher": "~0.1",
+    "karma-mocha-reporter": "~0.2.2"
   },
   "engines": {
     "node": ">=0.8.0"
