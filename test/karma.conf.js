@@ -2,12 +2,13 @@ module.exports = function(config) {
 	config.set({
 		basePath : '../',
 
-		exclude : [],
 		autoWatch : true,
+		singleRun: false,
+		exclude : [],
 
 		frameworks : [ 'jasmine' ],
 
-		browsers : [ 'PhantomJS' ], //[ 'PhantomJS', 'Chrome', 'Firefox', 'Safari'],
+		browsers : [ 'Chrome' ], //[ 'PhantomJS', 'Chrome', 'Firefox', 'Safari'],
 
 		plugins : [ 'karma-junit-reporter', 'karma-chrome-launcher',
 				'karma-firefox-launcher', 'karma-jasmine', 'karma-coverage', 'karma-phantomjs-launcher' ],

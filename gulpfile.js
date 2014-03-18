@@ -67,7 +67,7 @@ gulp.task('continues-run-test', function() {
 	  return gulp.src(testFiles)
 	    .pipe(karma({
 	      configFile: 'test/karma.continuesrun.conf.js',
-	      action: 'run'
+	      action: 'watch'
 	    }))
 	    .on('error', function(err) {
 	      // Make sure failed tests cause gulp to exit non-zero

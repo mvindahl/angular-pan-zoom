@@ -41,6 +41,18 @@ describe('PanZoom specs', function() {
 		$scope.panzoomConfig.neutralZoomLevel = 1;
 		compile(element)($scope);
 		$scope.$digest();
-		expect(element.html()).toBe('<div class="pan-zoom-contents" style="position: absolute; -webkit-transform-origin-x: 0px; -webkit-transform-origin-y: 0px; -webkit-transform: scale(3.5559616234189844); left: -1356.6450419689784px; top: -1261.0671526809342px; " ng-transclude=""></div>');
+		var zoomContent = element.children()
+		expect(zoomContent.css('left')).toBe('-1356.6450419689784px');
+		expect(zoomContent.css('-webkit-transform')).toBe('scale(3.5559616234189844)');
+	});
+
+	it('directive should work diffently with neutral zoom level of 3', function() {
+		$scope.panzoomConfig.neutralZoomLevel = 3;
+		compile(element)($scope);
+		$scope.$digest();
+		var zoomContent = element.children()
+		expect(zoomContent.css('left')).toBe('-1286.8438742954654px');
+		expect(zoomContent.css('top')).toBe('-1199.037370072286px');
+		expect(zoomContent.css('-webkit-transform')).toBe('scale(3.4146637131487156)');
 	});
 });
