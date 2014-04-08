@@ -279,18 +279,25 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 					}
 
 					if ($scope.panVelocity) {
-						$scope.base.pan.x += $scope.panVelocity.x * deltaTime; // FIXME reintroduce
-						$scope.panVelocity.x *= (1 - $scope.config.friction * deltaTime);
+						while (deltaTime > 0) { // prevent overshooting if delta time is large for some reason. We apply the simple solution of slicing delta time into smaller pieces and applying each one
+							var dTime = Math.min(0.02, deltaTime);
+							deltaTime -= dTime;
 
-						$scope.base.pan.y += $scope.panVelocity.y * deltaTime;
-						$scope.panVelocity.y *= (1 - $scope.config.friction * deltaTime);
+							$scope.base.pan.x += $scope.panVelocity.x * dTime; // FIXME reintroduce
+							$scope.panVelocity.x *= (1 - $scope.config.friction * dTime);
 
-						var speed = length($scope.panVelocity);
+							$scope.base.pan.y += $scope.panVelocity.y * dTime;
+							$scope.panVelocity.y *= (1 - $scope.config.friction * dTime);
 
-						if (speed < $scope.config.haltSpeed) {
-							$scope.panVelocity = undefined;
+							var speed = length($scope.panVelocity);
 
-							$scope.config.modelChangedCallback($scope.model);
+							if (speed < $scope.config.haltSpeed) {
+								$scope.panVelocity = undefined;
+
+								$scope.config.modelChangedCallback($scope.model);
+
+								break;
+							}
 						}
 					}
 
