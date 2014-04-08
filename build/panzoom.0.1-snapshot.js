@@ -307,7 +307,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			// event handlers
 
 			$scope.onDblClick = function($event) {
-				var clickPoint = { x: $event.clientX - frameElement.offset().left, y: $event.clientY - frameElement.offset().top };
+				var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
 				zoomIn(clickPoint);
 			};
 
@@ -374,7 +374,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 				var sign = $deltaY / Math.abs($deltaY);
 
-				var clickPoint = { x: $event.clientX - frameElement.offset().left, y: $event.clientY - frameElement.offset().top };
+				var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
 
 				if (sign < 0) {
 					zoomIn(clickPoint);
