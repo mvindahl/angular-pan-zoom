@@ -41,6 +41,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
 			$scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function() {};
 			$scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
+			$scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement || 1.0;
 
 			$scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
 			$scope.config.initialPanX = $scope.config.initialPanX || 0;
@@ -200,14 +201,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			var zoomIn = function(clickPoint) {
 				changeZoomLevel(
-						$scope.base.zoomLevel + 1.0,
+						$scope.base.zoomLevel + $scope.config.zoomButtonIncrement,
 						clickPoint);
 			};
 			$scope.model.zoomIn = zoomIn;
 
 			var zoomOut = function(clickPoint) {
 				changeZoomLevel(
-						$scope.base.zoomLevel - 1.0,
+						$scope.base.zoomLevel - $scope.config.zoomButtonIncrement,
 						clickPoint);
 			};
 			$scope.model.zoomOut = zoomOut;
@@ -283,7 +284,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 							var dTime = Math.min(0.02, deltaTime);
 							deltaTime -= dTime;
 
-							$scope.base.pan.x += $scope.panVelocity.x * dTime; // FIXME reintroduce
+							$scope.base.pan.x += $scope.panVelocity.x * dTime;
 							$scope.panVelocity.x *= (1 - $scope.config.friction * dTime);
 
 							$scope.base.pan.y += $scope.panVelocity.y * dTime;
@@ -380,6 +381,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				}
 
 				var sign = $deltaY / Math.abs($deltaY);
+				if (Math.abs($deltaY) < 3) {
+					return;
+				}
 
 				var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
 
