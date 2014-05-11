@@ -9,7 +9,7 @@
 //Also, we should see how to facilitate minification. Probably some of the same things.
 
 angular.module('panzoom', ['monospaced.mousewheel'])
-.directive('panzoom', function() {
+.directive('panzoom', ['$document', function($document) {
 	return {
 		restrict: 'E',
 		transclude: true,
@@ -325,11 +325,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				previousPosition = { x: $event.pageX, y: $event.pageY };
 				lastMouseEventTime = jQuery.now();
 				$scope.dragging = true;
+
+				$document.on('mousemove', $scope.onMousemove);
+				$document.on('mouseup', $scope.onMouseup);
 			};
 
 			$scope.onMousemove = function($event) {
 				if (!$scope.dragging) {
-					return;
+					// return;
 				}
 
 				var now = jQuery.now();
@@ -366,6 +369,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				}
 
 				$scope.dragging = false;
+
+				$document.off('mousemove', $scope.onMousemove);
+				$document.off('mouseup', $scope.onMouseup);
 			};
 
 			$scope.onMouseleave = function() {
@@ -391,8 +397,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			};
 		}],
 		template:
-			'<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)" ng-mousemove="onMousemove($event)"' +
-				' ng-mouseup="onMouseup($event)" ng-mouseleave="onMouseleave($event)" msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
+			'<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +
+				' msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
 				' style="position:relative;overflow:hidden">' +
 				'<div class="pan-zoom-contents" style="position:absolute;left:0px;top:0px" ng-transclude>' +
 					// transcluded contents will be inserted here
@@ -400,9 +406,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			'</div>',
 			replace: true
 	};
-});
+}]);
 angular.module('panzoomwidget', [])
-.directive('panzoomwidget', function() {
+.directive('panzoomwidget', ['$document', function($document) {
 	return {
 		restrict: 'E',
 		transclude: true,
@@ -454,10 +460,14 @@ angular.module('panzoomwidget', [])
 
 			$scope.onMousedown = function() {
 				isDragging = true;
+
+				$document.on('mousemove', $scope.onMousemove);
+				$document.on('mouseup', $scope.onMouseup);
 			};
 
 			$scope.onMousemove = function($event) {
-				if (isDragging) {
+				if (true || isDragging) {
+					$event.preventDefault();
 					var zoomLevel = getZoomLevelForMousePoint($event);
 					$scope.model.changeZoomLevel(zoomLevel);
 				}
@@ -465,6 +475,9 @@ angular.module('panzoomwidget', [])
 
 			$scope.onMouseup = function() {
 				isDragging = false;
+
+				$document.off('mousemove', $scope.onMousemove);
+				$document.off('mouseup', $scope.onMouseup);
 			};
 
 			$scope.onMouseleave = function() {
@@ -477,10 +490,10 @@ angular.module('panzoomwidget', [])
 			}, 25);
 		}],
 		template:
-			'<div class="panzoomwidget" ng-mouseleave="onMouseleave()">' +
+			'<div class="panzoomwidget">' +
 				'<div ng-click="zoomIn()" ng-mouseenter="zoomToLevelIfDragging(config.zoomLevels - 1)" class="zoom-button zoom-button-in">+</div>' +
-				'<div class="zoom-slider" ng-mousedown="onMousedown()" ng-mouseup="onMouseup()" ' +
-						'ng-mousemove="onMousemove($event)" ng-click="onClick($event)">' +
+				'<div class="zoom-slider" ng-mousedown="onMousedown()" ' +
+						'ng-click="onClick($event)">' +
 					'<div class="zoom-slider-widget" style="height:{{widgetConfig.zoomLevelHeight - 2}}px"></div>' +
 					'<div ng-repeat="zoomLevel in getZoomLevels()" "' +
 					' class="zoom-level zoom-level-{{zoomLevel}}" style="height:{{widgetConfig.zoomLevelHeight}}px"></div>' +
@@ -490,4 +503,4 @@ angular.module('panzoomwidget', [])
 			'</div>',
 		replace: true
 	};
-});
+}]);
