@@ -466,11 +466,9 @@ angular.module('panzoomwidget', [])
 			};
 
 			$scope.onMousemove = function($event) {
-				if (true || isDragging) {
-					$event.preventDefault();
-					var zoomLevel = getZoomLevelForMousePoint($event);
-					$scope.model.changeZoomLevel(zoomLevel);
-				}
+				$event.preventDefault();
+				var zoomLevel = getZoomLevelForMousePoint($event);
+				$scope.model.changeZoomLevel(zoomLevel);
 			};
 
 			$scope.onMouseup = function() {

@@ -9,7 +9,7 @@
 //Also, we should see how to facilitate minification. Probably some of the same things.
 
 angular.module('panzoom', ['monospaced.mousewheel'])
-.directive('panzoom', function() {
+.directive('panzoom', ['$document', function($document) {
 	return {
 		restrict: 'E',
 		transclude: true,
@@ -41,7 +41,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
 			$scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function() {};
 			$scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
-			$scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement || 1.0;
 
 			$scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
 			$scope.config.initialPanX = $scope.config.initialPanX || 0;
@@ -201,14 +200,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			var zoomIn = function(clickPoint) {
 				changeZoomLevel(
-						$scope.base.zoomLevel + $scope.config.zoomButtonIncrement,
+						$scope.base.zoomLevel + 1.0,
 						clickPoint);
 			};
 			$scope.model.zoomIn = zoomIn;
 
 			var zoomOut = function(clickPoint) {
 				changeZoomLevel(
-						$scope.base.zoomLevel - $scope.config.zoomButtonIncrement,
+						$scope.base.zoomLevel - 1.0,
 						clickPoint);
 			};
 			$scope.model.zoomOut = zoomOut;
@@ -284,7 +283,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 							var dTime = Math.min(0.02, deltaTime);
 							deltaTime -= dTime;
 
-							$scope.base.pan.x += $scope.panVelocity.x * dTime;
+							$scope.base.pan.x += $scope.panVelocity.x * dTime; // FIXME reintroduce
 							$scope.panVelocity.x *= (1 - $scope.config.friction * dTime);
 
 							$scope.base.pan.y += $scope.panVelocity.y * dTime;
@@ -326,11 +325,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				previousPosition = { x: $event.pageX, y: $event.pageY };
 				lastMouseEventTime = jQuery.now();
 				$scope.dragging = true;
+
+				$document.on('mousemove', $scope.onMousemove);
+				$document.on('mouseup', $scope.onMouseup);
 			};
 
 			$scope.onMousemove = function($event) {
 				if (!$scope.dragging) {
-					return;
+					// return;
 				}
 
 				var now = jQuery.now();
@@ -367,6 +369,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				}
 
 				$scope.dragging = false;
+
+				$document.off('mousemove', $scope.onMousemove);
+				$document.off('mouseup', $scope.onMouseup);
 			};
 
 			$scope.onMouseleave = function() {
@@ -381,9 +386,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				}
 
 				var sign = $deltaY / Math.abs($deltaY);
-				if (Math.abs($deltaY) < 3) {
-					return;
-				}
 
 				var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
 
@@ -395,8 +397,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			};
 		}],
 		template:
-			'<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)" ng-mousemove="onMousemove($event)"' +
-				' ng-mouseup="onMouseup($event)" ng-mouseleave="onMouseleave($event)" msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
+			'<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +
+				' msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
 				' style="position:relative;overflow:hidden">' +
 				'<div class="pan-zoom-contents" style="position:absolute;left:0px;top:0px" ng-transclude>' +
 					// transcluded contents will be inserted here
@@ -404,4 +406,4 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			'</div>',
 			replace: true
 	};
-});
+}]);
