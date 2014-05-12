@@ -41,6 +41,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			$scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
 			$scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function() {};
 			$scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
+			$scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement || 1.0;
 
 			$scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
 			$scope.config.initialPanX = $scope.config.initialPanX || 0;
@@ -200,14 +201,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
 			var zoomIn = function(clickPoint) {
 				changeZoomLevel(
-						$scope.base.zoomLevel + 1.0,
+						$scope.base.zoomLevel + $scope.config.zoomButtonIncrement,
 						clickPoint);
 			};
 			$scope.model.zoomIn = zoomIn;
 
 			var zoomOut = function(clickPoint) {
 				changeZoomLevel(
-						$scope.base.zoomLevel - 1.0,
+						$scope.base.zoomLevel - $scope.config.zoomButtonIncrement,
 						clickPoint);
 			};
 			$scope.model.zoomOut = zoomOut;
