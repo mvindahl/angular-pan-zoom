@@ -330,6 +330,15 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				$document.on('mousemove', $scope.onMousemove);
 				$document.on('mouseup', $scope.onMouseup);
 			};
+			var pan = function(delta) {
+				delta.x = delta.x || 0;
+				delta.y = delta.y || 0;
+				$scope.base.pan.x += delta.x;
+				$scope.base.pan.y += delta.y;
+
+				syncModelToDOM();			
+			};
+			$scope.model.pan = pan;
 
 			$scope.onMousemove = function($event) {
 				if (!$scope.dragging) {
@@ -340,10 +349,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 				var timeSinceLastMouseEvent = (now - lastMouseEventTime) / 1000;
 				lastMouseEventTime = now;
 				var dragDelta = { x: $event.pageX - previousPosition.x, y: $event.pageY - previousPosition.y };
-				$scope.base.pan.x += dragDelta.x;
-				$scope.base.pan.y += dragDelta.y;
+				pan(dragDelta);
 
-				syncModelToDOM();
 
 				// set these for the animation slow down once drag stops
 				$scope.panVelocity = {
