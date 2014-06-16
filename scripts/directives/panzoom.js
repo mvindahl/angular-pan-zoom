@@ -47,6 +47,11 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			$scope.config.initialPanX = $scope.config.initialPanX || 0;
 			$scope.config.initialPanY = $scope.config.initialPanY || 0;
 
+			$scope.config.zoomOnDoubleClick = $scope.config.zoomOnDoubleClick!==undefined ? $scope.config.zoomOnDoubleClick : true;
+			$scope.config.zoomOnMouseWheel = $scope.config.zoomOnMouseWheel!==undefined ? $scope.config.zoomOnMouseWheel : true;
+			$scope.config.panOnClickDrag = $scope.config.panOnClickDrag!==undefined ? $scope.config.panOnClickDrag : true;
+
+
 			var calcZoomToFit = function(rect) {
 				// let (W, H) denote the size of the viewport
 				// let (w, h) denote the size of the rectangle to zoom to
@@ -315,20 +320,24 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			// event handlers
 
 			$scope.onDblClick = function($event) {
-				var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
-				zoomIn(clickPoint);
+				if ( $scope.config.zoomOnDoubleClick ) {
+					var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
+					zoomIn(clickPoint);
+				}
 			};
 
 			var lastMouseEventTime;
 			var previousPosition;
 
 			$scope.onMousedown = function($event) {
-				previousPosition = { x: $event.pageX, y: $event.pageY };
-				lastMouseEventTime = jQuery.now();
-				$scope.dragging = true;
+				if ( $scope.config.panOnClickDrag ) {
+					previousPosition = { x: $event.pageX, y: $event.pageY };
+					lastMouseEventTime = jQuery.now();
+					$scope.dragging = true;
 
-				$document.on('mousemove', $scope.onMousemove);
-				$document.on('mouseup', $scope.onMouseup);
+					$document.on('mousemove', $scope.onMousemove);
+					$document.on('mouseup', $scope.onMouseup);					
+				}
 			};
 			var pan = function(delta) {
 				delta.x = delta.x || 0;
@@ -387,20 +396,22 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 			};
 
 			$scope.onMouseWheel = function($event, $delta, $deltaX, $deltaY) {
-				$event.preventDefault();
+				if ( $scope.config.zoomOnMouseWheel ) {
+					$event.preventDefault();
 
-				if ($scope.zoomAnimation) {
-					return; // already zooming
-				}
+					if ($scope.zoomAnimation) {
+						return; // already zooming
+					}
 
-				var sign = $deltaY / Math.abs($deltaY);
+					var sign = $deltaY / Math.abs($deltaY);
 
-				var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
+					var clickPoint = { x: $event.pageX - frameElement.offset().left, y: $event.pageY - frameElement.offset().top };
 
-				if (sign < 0) {
-					zoomIn(clickPoint);
-				} else {
-					zoomOut(clickPoint);
+					if (sign < 0) {
+						zoomIn(clickPoint);
+					} else {
+						zoomOut(clickPoint);
+					}
 				}
 			};
 		}],
