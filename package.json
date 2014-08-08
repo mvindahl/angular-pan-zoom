@@ -1,8 +1,7 @@
 {
     "name": "angularpanzoom",
     "version": "0.0.1",
-    "dependencies": {},
-    "devDependencies": {
+    "dependencies": {
         "gulp": "~3.5.5",
         "gulp-uglify": "~0.2.1",
         "gulp-concat": "~2.1.7",
@@ -21,6 +20,7 @@
         "karma-chrome-launcher": "~0.1",
         "karma-mocha-reporter": "~0.2.2"
     },
+    "devDependencies": {},
     "engines": {
         "node": ">=0.8.0"
     },
