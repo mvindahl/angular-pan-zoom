@@ -25,6 +25,10 @@
         "node": ">=0.8.0"
     },
     "scripts": {
-        "test": "karma test-phantom"
+        "test": "./node_modules/gulp/bin/gulp.js test-phantom"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/mvindahl/repository.git"
     }
 }
