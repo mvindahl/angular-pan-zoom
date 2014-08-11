@@ -11,7 +11,7 @@
         "scss",
         "target",
         "test",
-        "package.json"
+        "package.json",
         ".gitignore",
         ".jshintrc",
         ".project",
