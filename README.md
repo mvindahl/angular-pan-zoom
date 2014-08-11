@@ -7,6 +7,13 @@ AngularJS directive for implementing pan and zoom on any DOM element
 
 [![Build Status](https://travis-ci.org/mvindahl/angular-pan-zoom.svg?branch=master)](https://travis-ci.org/mvindahl/angular-pan-zoom)
 
+Getting it:
+-----------
+Get the code from github. Or simpler yet, use bower:
+```
+bower install angular-pan-zoom
+```
+
 Features:
 ---------
 - Zoom using mouse wheel, double click, or control widget
@@ -25,7 +32,8 @@ For convenience, these requirements are checked in as part of the project. They 
 
 Demo:
 -----
-Check out the project and open test.html in a browser for a demo of the functionality. [TBD: Figure out if I can include it at this spot]
+Click [here](http://htmlpreview.github.io/?http://rawgithub.com/mvindahl/angular-pan-zoom/master/demo/demo.dev.html) for an online demo of
+the functionality.
 
 Usage:
 ------
