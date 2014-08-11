@@ -23,16 +23,16 @@ gulp.task('default', function () {
         .pipe(uglify({
             preserveComments: 'some'
         }))
-        .pipe(concat('panzoom.0.1-snapshot.min.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(concat('panzoom.0.9.0.min.js'))
+        .pipe(gulp.dest('./bin'));
 
     gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js'])
-        .pipe(concat('panzoom.0.1-snapshot.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(concat('panzoom.0.9.0.js'))
+        .pipe(gulp.dest('./bin'));
 
     gulp.src('./scss/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./bin'));
 });
 
 gulp.task('jshint', function () {
@@ -47,7 +47,7 @@ var testFiles = [
               'bower_components/angular/angular.js',
               'bower_components/angular-mocks/angular-mocks.js',
               'bower_components/hamsterjs/hamster.js',
-             'bower_components/angular-mousewheel/mousewheel.js',
+              'bower_components/angular-mousewheel/mousewheel.js',
               'scripts/directives/*.js',
               'test/unit/*.js'];
 
