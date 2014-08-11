@@ -1,7 +1,11 @@
+
+
 angular-pan-zoom
 ================
 
 AngularJS directive for implementing pan and zoom on any DOM element
+
+[![Build Status](https://travis-ci.org/mvindahl/angular-pan-zoom.svg?branch=master)](https://travis-ci.org/mvindahl/angular-pan-zoom)
 
 Features:
 ---------
