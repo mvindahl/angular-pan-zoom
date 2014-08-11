@@ -2,7 +2,7 @@
     "name": "angularpanzoom",
     "version": "0.0.1",
     "dependencies": {
-        "gulp": "~3.5.5",
+        "gulp": "~3.4.0",
         "gulp-uglify": "~0.2.1",
         "gulp-concat": "~2.1.7",
         "gulp-jshint": "~1.5.0",
