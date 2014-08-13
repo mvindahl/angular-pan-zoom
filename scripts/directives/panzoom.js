@@ -9,8 +9,8 @@
 //Also, we should see how to facilitate minification. Probably some of the same things.
 
 angular.module('panzoom', ['monospaced.mousewheel'])
-    .directive('panzoom', ['$document',
-        function ($document) {
+    .directive('panzoom', ['$document', 'PanZoomService',
+        function ($document, PanZoomService) {
             return {
                 restrict: 'E',
                 transclude: true,

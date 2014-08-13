@@ -16,6 +16,7 @@ module.exports = function (config) {
             'bower_components/hamsterjs/hamster.js',
             'bower_components/angular-mousewheel/mousewheel.js',
             'scripts/directives/*.js',
+            'scripts/services/*.js',
             'test/unit/*.js'
         ],
 

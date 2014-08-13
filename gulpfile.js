@@ -42,13 +42,14 @@ gulp.task('jshint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-var testFiles = [
+var testFiles = [ // FIXME this is duplicated in karma.conf.js, can we lose it here?
               'bower_components/jQuery/dist/jquery.js',
               'bower_components/angular/angular.js',
               'bower_components/angular-mocks/angular-mocks.js',
               'bower_components/hamsterjs/hamster.js',
               'bower_components/angular-mousewheel/mousewheel.js',
               'scripts/directives/*.js',
+              'scripts/services/*.js',
               'test/unit/*.js'];
 
 gulp.task('test', function () {
