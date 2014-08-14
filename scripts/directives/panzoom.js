@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v0.9.0-snapshot
+ AngularJS pan/zoom v1.0.0-snapshot
  (c) 2014 Martin Vindahl Olsen
  License: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
@@ -210,21 +210,18 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                             };
                         };
                         $scope.model.changeZoomLevel = changeZoomLevel; // FIXME remove
-                        api.changeZoomLevel = changeZoomLevel;
 
                         var zoomIn = function (clickPoint) {
                             changeZoomLevel(
                                 $scope.base.zoomLevel + $scope.config.zoomButtonIncrement,
                                 clickPoint);
                         };
-                        api.zoomIn = zoomIn;
 
                         var zoomOut = function (clickPoint) {
                             changeZoomLevel(
                                 $scope.base.zoomLevel - $scope.config.zoomButtonIncrement,
                                 clickPoint);
                         };
-                        api.zoomOut = zoomOut;
 
                         var getViewPosition = function (modelPosition) {
                             //  p' = p * s + t
@@ -237,7 +234,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 y: p.y * s + t.y
                             };
                         };
-                        api.getViewPosition = getViewPosition;
 
                         var getModelPosition = function (viewPosition) {
                             //  p = (1/s)(p' - t)
@@ -250,14 +246,12 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 y: (1 / s) * (pmark.y - t.y)
                             };
                         };
-                        api.getModelPosition = getModelPosition;
 
                         var zoomToFit = function (rectangle) {
                             // example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
                             $scope.base = calcZoomToFit(rectangle);
 
                         };
-                        api.zoomToFit = zoomToFit;
 
                         var length = function (vector2d) {
                             return Math.sqrt(vector2d.x * vector2d.x + vector2d.y * vector2d.y);
@@ -437,6 +431,19 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 }
                             }
                         };
+
+                        // create public API
+                        api = {
+                            model: $scope.model,
+                            config: $scope.config,
+                            changeZoomLevel: changeZoomLevel,
+                            zoomIn: zoomIn,
+                            zoomOut: zoomOut,
+                            zoomToFit: zoomToFit,
+                            getViewPosition: getViewPosition,
+                            getModelPosition: getModelPosition
+                        };
+
   }],
                 link: function (scope, element, attrs, controllers) {
                     var elementId = element.attr('id');
