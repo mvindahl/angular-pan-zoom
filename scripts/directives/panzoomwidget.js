@@ -1,6 +1,8 @@
 angular.module('panzoomwidget', [])
     .directive('panzoomwidget', ['$document',
         function ($document) {
+            var panzoomId;
+
             return {
                 restrict: 'E',
                 transclude: true,
@@ -8,8 +10,8 @@ angular.module('panzoomwidget', [])
                     config: '=',
                     model: '='
                 },
-                controller: ['$scope', '$element',
-                    function ($scope, $element) {
+                controller: ['$scope', '$element', 'PanZoomService',
+                    function ($scope, $element, PanZoomService) {
                         var zoomSliderWidget = $element.find('.zoom-slider-widget');
                         var isDragging = false;
 
@@ -39,16 +41,22 @@ angular.module('panzoomwidget', [])
                         };
 
                         $scope.zoomIn = function () {
-                            $scope.model.zoomIn();
+                            PanZoomService.getAPI(panzoomId).then(function (api) {
+                                api.zoomIn();
+                            });
                         };
 
                         $scope.zoomOut = function () {
-                            $scope.model.zoomOut();
+                            PanZoomService.getAPI(panzoomId).then(function (api) {
+                                api.zoomOut();
+                            });
                         };
 
                         $scope.onClick = function ($event) {
                             var zoomLevel = getZoomLevelForMousePoint($event);
-                            $scope.model.changeZoomLevel(zoomLevel);
+                            PanZoomService.getAPI(panzoomId).then(function (api) {
+                                api.changeZoomLevel(zoomLevel);
+                            });
                         };
 
                         $scope.onMousedown = function () {
@@ -61,7 +69,7 @@ angular.module('panzoomwidget', [])
                         $scope.onMousemove = function ($event) {
                             $event.preventDefault();
                             var zoomLevel = getZoomLevelForMousePoint($event);
-                            $scope.model.changeZoomLevel(zoomLevel);
+                            api.changeZoomLevel(zoomLevel);
                         };
 
                         $scope.onMouseup = function () {
@@ -80,6 +88,21 @@ angular.module('panzoomwidget', [])
                             zoomSliderWidget.css('top', sliderWidgetTopFromZoomLevel($scope.model.zoomLevel) + 'px');
                         }, 25);
   }],
+                compile: function compile(tElement, tAttrs, transclude) {
+                    // we pick the value ourselves at this point, before the controller is instantiated,
+                    // instead of passing it as a scope variable. This is to not force people to type quotes
+                    // around the string.
+                    panzoomId = tElement.attr('panzoom-id');
+                    if (!panzoomId) {
+                        throw 'Error in setup. You must define attribute panzoom-id on the <panzoomwidget> element in order to link it to the ' +
+                            'id of the <panzoom> element. Ref: ';
+                    }
+
+                    return {
+                        pre: function preLink(scope, iElement, iAttrs, controller) {},
+                        post: function postLink(scope, iElement, iAttrs, controller) {}
+                    }
+                },
                 template: '<div class="panzoomwidget">' +
                     '<div ng-click="zoomIn()" ng-mouseenter="zoomToLevelIfDragging(config.zoomLevels - 1)" class="zoom-button zoom-button-in">+</div>' +
                     '<div class="zoom-slider" ng-mousedown="onMousedown()" ' +

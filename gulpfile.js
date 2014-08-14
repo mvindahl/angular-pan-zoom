@@ -19,14 +19,14 @@ var sass = require('gulp-sass');
 var karma = require('gulp-karma');
 
 gulp.task('default', function () {
-    gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js'])
+    gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js', './scripts/services/PanZoomService.js'])
         .pipe(uglify({
             preserveComments: 'some'
         }))
         .pipe(concat('panzoom.min.js'))
         .pipe(gulp.dest('./build'));
 
-    gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js'])
+    gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js', './scripts/services/PanZoomService.js'])
         .pipe(concat('panzoom.js'))
         .pipe(gulp.dest('./build'));
 

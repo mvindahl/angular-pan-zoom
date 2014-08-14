@@ -9,8 +9,10 @@
 //Also, we should see how to facilitate minification. Probably some of the same things.
 
 angular.module('panzoom', ['monospaced.mousewheel'])
-    .directive('panzoom', ['$document',
-        function ($document) {
+    .directive('panzoom', ['$document', 'PanZoomService',
+        function ($document, PanZoomService) {
+            var api = {};
+
             return {
                 restrict: 'E',
                 transclude: true,
@@ -207,21 +209,22 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 progress: 0.0
                             };
                         };
-                        $scope.model.changeZoomLevel = changeZoomLevel;
+                        $scope.model.changeZoomLevel = changeZoomLevel; // FIXME remove
+                        api.changeZoomLevel = changeZoomLevel;
 
                         var zoomIn = function (clickPoint) {
                             changeZoomLevel(
                                 $scope.base.zoomLevel + $scope.config.zoomButtonIncrement,
                                 clickPoint);
                         };
-                        $scope.model.zoomIn = zoomIn;
+                        api.zoomIn = zoomIn;
 
                         var zoomOut = function (clickPoint) {
                             changeZoomLevel(
                                 $scope.base.zoomLevel - $scope.config.zoomButtonIncrement,
                                 clickPoint);
                         };
-                        $scope.model.zoomOut = zoomOut;
+                        api.zoomOut = zoomOut;
 
                         var getViewPosition = function (modelPosition) {
                             //  p' = p * s + t
@@ -234,7 +237,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 y: p.y * s + t.y
                             };
                         };
-                        $scope.model.getViewPosition = getViewPosition;
+                        api.getViewPosition = getViewPosition;
 
                         var getModelPosition = function (viewPosition) {
                             //  p = (1/s)(p' - t)
@@ -247,14 +250,14 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 y: (1 / s) * (pmark.y - t.y)
                             };
                         };
-                        $scope.model.getModelPosition = getModelPosition;
+                        api.getModelPosition = getModelPosition;
 
                         var zoomToFit = function (rectangle) {
                             // example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
                             $scope.base = calcZoomToFit(rectangle);
 
                         };
-                        $scope.model.zoomToFit = zoomToFit;
+                        api.zoomToFit = zoomToFit;
 
                         var length = function (vector2d) {
                             return Math.sqrt(vector2d.x * vector2d.x + vector2d.y * vector2d.y);
@@ -435,6 +438,12 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                             }
                         };
   }],
+                link: function (scope, element, attrs, controllers) {
+                    var elementId = element.attr('id');
+                    if (elementId) {
+                        PanZoomService.registerAPI(elementId, api);
+                    }
+                },
                 template: '<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +
                     ' msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
                     ' style="position:relative;overflow:hidden;cursor:move">' +

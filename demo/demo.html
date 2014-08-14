@@ -11,8 +11,8 @@
 
 <body ng-controller="TestController">
     <div style="position:relative">
-        <panzoomwidget config="panzoomConfig" model="panzoomModel" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
-        <panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px">
+        <panzoomwidget config="panzoomConfig" model="panzoomModel" panzoom-id="PanZoom" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
+        <panzoom id="PanZoom" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px">
             <img src="images/shark_attack.jpg" />
         </panzoom>
     </div>
@@ -23,7 +23,7 @@
 <script src="../bower_components/angular/angular.min.js"></script>
 <script src="../bower_components/angular-mousewheel/mousewheel.js"></script>
 
-<script src="../bin/panzoom.js"></script>
+<script src="../build/panzoom.js"></script>
 <script src="../scripts/controllers/TestController.js"></script>
 
 </html>

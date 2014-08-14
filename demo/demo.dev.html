@@ -11,8 +11,8 @@
 
 <body ng-controller="TestController">
     <div style="position:relative">
-        <panzoomwidget config="panzoomConfig" model="panzoomModel" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
-        <panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px">
+        <panzoomwidget config="panzoomConfig" model="panzoomModel" panzoom-id="PanZoom" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
+        <panzoom id="PanZoom" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px">
             <img src="images/shark_attack.jpg" style="position:absolute" />
             <svg style="position:absolute" width="800px" height="600px">
                 <rect ng-repeat="rect in rects" ng-attr-x="{{rect.x}}" ng-attr-y="{{rect.y}}" ng-attr-width="{{rect.width}}" ng-attr-height="{{rect.height}}" rx="10" ry="10" style="fill:none;stroke-width:2;stroke:rgb(255,0,0)" />
