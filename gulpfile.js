@@ -23,16 +23,16 @@ gulp.task('default', function () {
         .pipe(uglify({
             preserveComments: 'some'
         }))
-        .pipe(concat('panzoom.0.9.0.min.js'))
-        .pipe(gulp.dest('./bin'));
+        .pipe(concat('panzoom.min.js'))
+        .pipe(gulp.dest('./build'));
 
     gulp.src(['./scripts/directives/panzoom.js', './scripts/directives/panzoomwidget.js'])
-        .pipe(concat('panzoom.0.9.0.js'))
-        .pipe(gulp.dest('./bin'));
+        .pipe(concat('panzoom.js'))
+        .pipe(gulp.dest('./build'));
 
     gulp.src('./scss/*.scss')
         .pipe(sass())
-        .pipe(gulp.dest('./bin'));
+        .pipe(gulp.dest('./build'));
 });
 
 gulp.task('jshint', function () {
