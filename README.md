@@ -7,6 +7,10 @@ AngularJS directive for implementing pan and zoom on any DOM element
 
 [![Build Status](https://travis-ci.org/mvindahl/angular-pan-zoom.svg?branch=master)](https://travis-ci.org/mvindahl/angular-pan-zoom)
 
+NOTE: Migration from 0.9.0 to 1.0.0
+-----------------------------------
+The 1.0.0 release introduced a breaking change in how the panzoom widget publishes its API. Migration guide [here](https://github.com/mvindahl/angular-pan-zoom/wiki/Migrating-from-0.9.0-to-1.0.0)
+
 Getting it:
 -----------
 Get the code from github. Or simpler yet, use bower:
@@ -96,14 +100,17 @@ PanZoomService.getAPI(panzoomId).then(function (api) {
 The API
 -------
 The API object contains the following properties:
-- model: the model object which was passed to the panzoom directive
-- config: the config object which was passed to the panzoom directive
-- changeZoomLevel(): change zoom level to a new value using a quick animation
-- zoomIn(): shorthand for increasing zoom level by one
-- zoomOut(): shorthand for decreasing zoom level by one
-- zoomToFit(rectangle): zoom to display a part of the contents. Example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
-- getViewPosition(modelPosition): takes a argument a {x:.., y:..} in the original, untransformed contents. Returns the current pixel position of this point.
-- getModelPosition(viewPosition): the reverse operation of getViewPosition()
+
+Method                           | Description
+-------------------------------- | -----------
+`model`                          | the model object which was passed to the panzoom directive
+`config`                         | the config object which was passed to the panzoom directive
+`changeZoomLevel()`              | change zoom level to a new value using a quick animation
+`zoomIn()`                       | shorthand for increasing zoom level by one
+`zoomOut()`                      | shorthand for decreasing zoom level by one
+`zoomToFit(rectangle)`           | zoom to display a part of the contents. Example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
+`getViewPosition(modelPosition)` | takes a argument a {x:.., y:..} in the original, untransformed contents. Returns the current pixel position of this point.
+`getModelPosition(viewPosition)` | the reverse operation of getViewPosition()
 
 
 The config object:
