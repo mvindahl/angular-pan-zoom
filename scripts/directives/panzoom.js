@@ -257,6 +257,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                             return Math.sqrt(vector2d.x * vector2d.x + vector2d.y * vector2d.y);
                         };
 
+                        var scopeIsDestroyed = false;
                         var AnimationTick = function () {
                             var lastTick = jQuery.now();
 
@@ -266,7 +267,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 lastTick = now;
 
                                 if ($scope.dragging) {
-                                    return true; // do nothing but keep timer alive
+                                    return !scopeIsDestroyed; // do nothing but keep timer alive
                                 }
 
                                 if ($scope.zoomAnimation) {
@@ -312,13 +313,16 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 syncModelToDOM();
 
                                 // FIXME actually we should kill the timer when unused, i.e. when animation has stopped. We should resurrect it as needed.
-                                return true; // keep timer alive
+                                return !scopeIsDestroyed; // keep timer alive
                             };
                         };
                         syncModelToDOM();
                         var tick = new AnimationTick();
                         jQuery.fx.timer(tick);
 
+                        $scope.$on('$destroy', function () {
+                            scopeIsDestroyed = true;
+                        });
                         // event handlers
 
                         $scope.onDblClick = function ($event) {
