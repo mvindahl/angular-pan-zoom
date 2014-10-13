@@ -252,7 +252,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                         var zoomToFit = function (rectangle) {
                             // example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
                             $scope.base = calcZoomToFit(rectangle);
-
+                            syncModelToDOM();
                         };
 
                         var length = function (vector2d) {
@@ -286,7 +286,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 }
 
                                 if ($scope.panVelocity) {
-                                    while (deltaTime > 0) { // prevent overshooting if delta time is large for some reason. We apply the simple solution of slicing delta time into smaller pieces and applying each one
+                                    // prevent overshooting if delta time is large for some reason. We apply the simple solution of
+                                    // slicing delta time into smaller pieces and applying each one
+                                    while (deltaTime > 0) {
                                         var dTime = Math.min(0.02, deltaTime);
                                         deltaTime -= dTime;
 
@@ -310,7 +312,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                                 syncModelToDOM();
 
-                                var doneAnimating = $scope.panVelocity == undefined && $scope.zoomAnimation == undefined;
+                                var doneAnimating = $scope.panVelocity === undefined && $scope.zoomAnimation === undefined;
                                 if (doneAnimating) {
                                     tick.isRegistered = false;
                                     lastTick = null;
@@ -329,7 +331,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 jQuery.fx.timer(tick);
                                 tick.isRegistered = true;
                             }
-                        };
+                        }
 
                         $scope.$on('$destroy', function () {
                             PanZoomService.unregisterAPI($scope.elementId);

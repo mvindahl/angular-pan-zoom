@@ -1,7 +1,7 @@
 angular.module('test', ['panzoom', 'panzoomwidget'])
 
-.controller('TestController', ['$scope',
-                               function ($scope) {
+.controller('TestController', ['$scope', 'PanZoomService',
+                               function ($scope, PanZoomService) {
         var shark = {
             x: 391,
             y: 371,
@@ -39,15 +39,21 @@ angular.module('test', ['panzoom', 'panzoomwidget'])
         $scope.panzoomModel = {};
 
         $scope.zoomToShark = function () {
-            $scope.panzoomModel.zoomToFit(shark);
+            PanZoomService.getAPI('PanZoom').then(function (api) {
+                api.zoomToFit(shark);
+            });
         };
 
         $scope.zoomToChopper = function () {
-            $scope.panzoomModel.zoomToFit(chopper);
+            PanZoomService.getAPI('PanZoom').then(function (api) {
+                api.zoomToFit(chopper);
+            });
         };
 
         $scope.zoomToLadder = function () {
-            $scope.panzoomModel.zoomToFit(ladder);
+            PanZoomService.getAPI('PanZoom').then(function (api) {
+                api.zoomToFit(ladder);
+            });
         };
 
 }
