@@ -105,8 +105,8 @@ angular.module('panzoomwidget', [])
                     '<div class="zoom-slider" ng-mousedown="onMousedown()" ' +
                     'ng-click="onClick($event)">' +
                     '<div class="zoom-slider-widget" ng-style="{\'height\': widgetConfig.zoomLevelHeight - 2 +\'px\'}"></div>' +
-                    '<div ng-repeat="zoomLevel in getZoomLevels()" "' +
-                    ' class="zoom-level zoom-level-{{zoomLevel}}" ng-style="{\'height\': widgetConfig.zoomLevelHeight +\'px\'}></div>' +
+                    '<div ng-repeat="zoomLevel in getZoomLevels()" ' +
+                    ' class="zoom-level zoom-level-{{zoomLevel}}" ng-style="{\'height\': widgetConfig.zoomLevelHeight +\'px\'}"></div>' +
                     '</div>' +
                     '<div ng-click="zoomOut()" ng-mouseenter="zoomToLevelIfDragging(0)" class="zoom-button zoom-button-out">-</div>' +
                     '<div ng-transclude></div>' +
