@@ -292,7 +292,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                         var dTime = Math.min(0.02, deltaTime);
                                         deltaTime -= dTime;
 
-                                        $scope.base.pan.x += $scope.panVelocity.x * dTime; // FIXME reintroduce
+                                        $scope.base.pan.x += $scope.panVelocity.x * dTime;
                                         $scope.panVelocity.x *= (1 - $scope.config.friction * dTime);
 
                                         $scope.base.pan.y += $scope.panVelocity.y * dTime;
@@ -321,6 +321,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                         jQuery.fx.timer(tick);
 
                         $scope.$on('$destroy', function () {
+                            PanZoomService.unregisterAPI($scope.elementId);
                             scopeIsDestroyed = true;
                         });
                         // event handlers
@@ -362,10 +363,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                         $scope.model.pan = pan;
 
                         $scope.onMousemove = function ($event) {
-                            if (!$scope.dragging) {
-                                // return;
-                            }
-
                             var now = jQuery.now();
                             var timeSinceLastMouseEvent = (now - lastMouseEventTime) / 1000;
                             lastMouseEventTime = now;
@@ -374,7 +371,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 y: $event.pageY - previousPosition.y
                             };
                             pan(dragDelta);
-
 
                             // set these for the animation slow down once drag stops
                             $scope.panVelocity = {
@@ -450,9 +446,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
   }],
                 link: function (scope, element, attrs, controllers) {
-                    var elementId = element.attr('id');
-                    if (elementId) {
-                        PanZoomService.registerAPI(elementId, api);
+                    scope.elementId = element.attr('id');
+                    if (scope.elementId) {
+                        PanZoomService.registerAPI(scope.elementId, api);
                     }
                 },
                 template: '<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +

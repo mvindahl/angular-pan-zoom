@@ -17,6 +17,10 @@ angular.module('panzoom').factory('PanZoomService', ['$q',
             }
         };
 
+        var unregisterAPI = function (key, panZoomAPI) {
+            delete panZoomAPIs[key];
+        };
+
         // this method returns a promise since it's entirely possible that it's called before the <panzoom> directive registered the API
         var getAPI = function (key) {
             if (!panZoomAPIs[key]) {
@@ -28,6 +32,7 @@ angular.module('panzoom').factory('PanZoomService', ['$q',
 
         return {
             registerAPI: registerAPI,
+            unregisterAPI: unregisterAPI,
             getAPI: getAPI
         };
 }]);

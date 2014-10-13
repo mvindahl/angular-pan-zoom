@@ -9,6 +9,8 @@ describe('PanZoom specs', function () {
     var $scope = null;
     var $compile = null;
     var $interval = null;
+    var PanZoomService = null;
+    var deferred = null;
 
     // copied from jquery but makes it use the angular $interval instead of setInterval for its timer
     var timerId;
@@ -44,17 +46,13 @@ describe('PanZoom specs', function () {
     };
     var testApp = angular.module('testApp', ['panzoom', 'panzoomwidget']);
 
-    var panzoomHtml = '<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>';
-
     beforeEach(module('testApp'));
-    beforeEach(inject(function ($rootScope, _$compile_, _$interval_) {
+    beforeEach(inject(function ($rootScope, _$compile_, _$interval_, _PanZoomService_, $q) {
         $scope = $rootScope;
         $compile = _$compile_;
         $interval = _$interval_;
-
-        // clear any animation ticks which may have been registered
-        jQuery.timers = [];
-        jQuery.fx.stop();
+        PanZoomService = _PanZoomService_;
+        deferred = $q.defer();
 
         $scope.rects = [chopper, shark, ladder];
 
@@ -74,8 +72,13 @@ describe('PanZoom specs', function () {
 
     }));
 
+    afterEach(function () {
+        $scope.$broadcast('$destroy');
+        $interval.flush(jQuery.fx.interval); // wait for the first event tick to complete as this will do the actual unregistering
+    });
+
     it('should create markup', function () {
-        var element = angular.element(panzoomHtml);
+        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>');
         $compile(element)($scope);
         $scope.$digest();
         expect(element.html()).toMatch(/<div class="pan-zoom-contents".*<\/div>/);
@@ -84,7 +87,7 @@ describe('PanZoom specs', function () {
     it('should not zoom when using neutral zoom level', function () {
         $scope.panzoomConfig.neutralZoomLevel = 3;
         $scope.panzoomConfig.initialZoomLevel = 3;
-        var element = angular.element(panzoomHtml);
+        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>');
         $compile(element)($scope);
         $scope.$digest();
 
@@ -92,7 +95,7 @@ describe('PanZoom specs', function () {
 
         $scope.panzoomConfig.neutralZoomLevel = 5;
         $scope.panzoomConfig.initialZoomLevel = 5;
-        element = angular.element(panzoomHtml);
+        element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>');
         $compile(element)($scope);
         $scope.$digest();
 
@@ -100,7 +103,7 @@ describe('PanZoom specs', function () {
     });
 
     it('should unregister its tick listener when directive is removed from page', function () {
-        var element = angular.element('<div ng-if="includeDirective">' + panzoomHtml + '</div>');
+        var element = angular.element('<div ng-if="includeDirective"><panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom></div>');
         $compile(element)($scope);
         $scope.includeDirective = true;
         $scope.$digest();
@@ -110,5 +113,25 @@ describe('PanZoom specs', function () {
         $interval.flush(jQuery.fx.interval); // need to wait for timer to to unregister the timer
 
         expect(timerId).toBe(null); // i.e. the native tick loop has stopped
+    });
+
+    it('should publish and unpublish its API', function () {
+        var _this = this;
+
+        var element = angular.element('<div ng-if="includeDirective"><panzoom id="PanZoomElementId" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom></div>');
+        $compile(element)($scope);
+        $scope.includeDirective = true;
+        $scope.$digest();
+
+        var handler = jasmine.createSpy('success');
+        PanZoomService.getAPI('PanZoomElementId').then(handler);
+        $scope.$digest();
+        expect(handler).toHaveBeenCalled();
+
+        $scope.includeDirective = false;
+        $scope.$digest();
+        PanZoomService.getAPI('PanZoomElementId').then(function (api) {
+            _this.fail(Error('Failed to unregister API'));
+        });
     });
 });

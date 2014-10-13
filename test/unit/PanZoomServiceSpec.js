@@ -65,4 +65,14 @@ describe('PanZoomService spec', function () {
         PanZoomService.getAPI('theKey');
         PanZoomService.getAPI('theKey');
     });
+
+    it('should allow APIs to be unregistered', function () {
+        var _this = this;
+        var theAPI = 'theAPI';
+        PanZoomService.registerAPI('theKey', theAPI);
+        PanZoomService.unregisterAPI('theKey');
+        PanZoomService.getAPI('theKey').then(function (value) {
+            this.fail(Error('Failed to unregister API'));
+        });
+    });
 });
