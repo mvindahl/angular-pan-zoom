@@ -11,9 +11,10 @@ describe('PanZoom specs', function () {
     var $interval = null;
     var PanZoomService = null;
     var deferred = null;
+    var $document = null;
 
     // copied from jquery but makes it use the angular $interval instead of setInterval for its timer
-    var timerId;
+    var timerId = null;
     jQuery.fx.start = function () {
         //console.log('jQuery.fx.start');
         if (!timerId) {
@@ -24,6 +25,12 @@ describe('PanZoom specs', function () {
         //console.log('jQuery.fx.stop');
         $interval.cancel(timerId);
         timerId = null;
+    };
+
+    // copied from jQuery but makes it possible to pretend to be in the future
+    var now = 0;
+    jQuery.now = function () {
+        return now;
     };
 
     var shark = {
@@ -47,12 +54,13 @@ describe('PanZoom specs', function () {
     var testApp = angular.module('testApp', ['panzoom', 'panzoomwidget']);
 
     beforeEach(module('testApp'));
-    beforeEach(inject(function ($rootScope, _$compile_, _$interval_, _PanZoomService_, $q) {
+    beforeEach(inject(function ($rootScope, _$compile_, _$interval_, _PanZoomService_, $q, _$document_) {
         $scope = $rootScope;
         $compile = _$compile_;
         $interval = _$interval_;
         PanZoomService = _PanZoomService_;
         deferred = $q.defer();
+        $document = _$document_;
 
         $scope.rects = [chopper, shark, ladder];
 
@@ -102,6 +110,53 @@ describe('PanZoom specs', function () {
         expect($(element).find('.pan-zoom-contents').css('-webkit-transform')).toBe('scale(1)');
     });
 
+    it('Should pan when the mouse is dragged', function () {
+        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+        $compile(element)($scope);
+        $scope.$digest();
+
+        element.find('#WrappedElement').trigger(new MouseEvent('mousedown', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+            clientX: 100,
+            clientY: 100
+        }));
+
+        expect($scope.panzoomModel.pan).toEqual({
+            x: 0,
+            y: 0
+        });
+
+        now += 40;
+        $document.trigger(new MouseEvent('mousemove', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+            clientX: 110,
+            clientY: 100
+        }));
+
+        expect($scope.panzoomModel.pan).toEqual({
+            x: 10,
+            y: 0
+        });
+
+        $document.trigger(new MouseEvent('mouseup', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+        }));
+
+        for (var i = 0; i < 10; i++) {
+            $interval.flush(jQuery.fx.interval);
+            now += jQuery.fx.interval;
+        }
+
+        expect($scope.panzoomModel.pan.x).toBeGreaterThan(10); // due to sliding effects
+        expect($scope.panzoomModel.pan.y).toEqual(0);
+    });
+
     it('should publish and unpublish its API', function () {
         var _this = this;
 
@@ -137,7 +192,7 @@ describe('PanZoom specs', function () {
             $scope.$digest();
             $interval.flush(jQuery.fx.interval); // at least one tick needs to pass before the tick is unregistered
 
-            expect(timerId).not.toBeDefined(); // i.e. the native tick loop has stopped
+            expect(timerId).toBeNull(); // i.e. the native tick loop has stopped
         });
 
     });
@@ -147,7 +202,7 @@ describe('PanZoom specs', function () {
         $compile(element)($scope);
         $scope.$digest();
 
-        expect(timerId).not.toBeDefined(); // the native tick loop has not been started
+        expect(timerId).toBeNull(); // the native tick loop has not been started
 
         PanZoomService.getAPI('PanZoomElementId').then(function (api) {
             api.zoomIn();
@@ -156,7 +211,7 @@ describe('PanZoom specs', function () {
 
             $interval.flush(500); // wait for zoom animation to complete
 
-            expect(timerId).not.toBeDefined(); // it's gone again
+            expect(timerId).toBeNull(); // it's gone again
         });
     });
 });

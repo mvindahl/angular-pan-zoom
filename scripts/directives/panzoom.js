@@ -211,7 +211,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                             wakeupAnimationTick();
                         };
-                        $scope.model.changeZoomLevel = changeZoomLevel; // FIXME remove
 
                         var zoomIn = function (clickPoint) {
                             changeZoomLevel(
@@ -299,7 +298,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                         $scope.panVelocity.y *= (1 - $scope.config.friction * dTime);
 
                                         var speed = length($scope.panVelocity);
-
                                         if (speed < $scope.config.haltSpeed) {
                                             $scope.panVelocity = undefined;
 
@@ -373,7 +371,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                             syncModelToDOM();
                         };
-                        $scope.model.pan = pan;
 
                         $scope.onMousemove = function ($event) {
                             var now = jQuery.now();
@@ -395,7 +392,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 x: $event.pageX,
                                 y: $event.pageY
                             };
-                            $event.preventDefault();
                         };
 
                         $scope.onMouseup = function () {
