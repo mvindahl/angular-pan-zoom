@@ -208,6 +208,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 duration: duration,
                                 progress: 0.0
                             };
+
+                            wakeupAnimationTick();
                         };
                         $scope.model.changeZoomLevel = changeZoomLevel; // FIXME remove
 
@@ -259,16 +261,12 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                         var scopeIsDestroyed = false;
                         var AnimationTick = function () {
-                            var lastTick = jQuery.now();
+                            var lastTick = null;
 
                             return function () {
                                 var now = jQuery.now();
-                                var deltaTime = (now - lastTick) / 1000;
+                                var deltaTime = lastTick ? (now - lastTick) / 1000 : 0;
                                 lastTick = now;
-
-                                if ($scope.dragging) {
-                                    return !scopeIsDestroyed; // do nothing but keep timer alive
-                                }
 
                                 if ($scope.zoomAnimation) {
                                     $scope.zoomAnimation.progress += deltaTime / $scope.zoomAnimation.duration;
@@ -312,13 +310,26 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                                 syncModelToDOM();
 
-                                // FIXME actually we should kill the timer when unused, i.e. when animation has stopped. We should resurrect it as needed.
-                                return !scopeIsDestroyed; // keep timer alive
+                                var doneAnimating = $scope.panVelocity == undefined && $scope.zoomAnimation == undefined;
+                                if (doneAnimating) {
+                                    tick.isRegistered = false;
+                                    lastTick = null;
+                                    return false; // kill the tick for now
+                                } else {
+                                    return !scopeIsDestroyed; // kill the tick for good if the directive goes off the page
+                                }
                             };
                         };
                         syncModelToDOM();
                         var tick = new AnimationTick();
-                        jQuery.fx.timer(tick);
+                        tick.isRegistered = false;
+
+                        function wakeupAnimationTick() {
+                            if (!tick.isRegistered) {
+                                jQuery.fx.timer(tick);
+                                tick.isRegistered = true;
+                            }
+                        };
 
                         $scope.$on('$destroy', function () {
                             PanZoomService.unregisterAPI($scope.elementId);
@@ -400,6 +411,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                             }
 
                             $scope.dragging = false;
+                            wakeupAnimationTick();
 
                             $document.off('mousemove', $scope.onMousemove);
                             $document.off('mouseup', $scope.onMouseup);
