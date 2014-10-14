@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.0
+ AngularJS pan/zoom v1.0.1
  (c) 2014 Martin Vindahl Olsen
  License: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
@@ -208,8 +208,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 duration: duration,
                                 progress: 0.0
                             };
+
+                            wakeupAnimationTick();
                         };
-                        $scope.model.changeZoomLevel = changeZoomLevel; // FIXME remove
 
                         var zoomIn = function (clickPoint) {
                             changeZoomLevel(
@@ -250,24 +251,21 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                         var zoomToFit = function (rectangle) {
                             // example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
                             $scope.base = calcZoomToFit(rectangle);
-
+                            syncModelToDOM();
                         };
 
                         var length = function (vector2d) {
                             return Math.sqrt(vector2d.x * vector2d.x + vector2d.y * vector2d.y);
                         };
 
+                        var scopeIsDestroyed = false;
                         var AnimationTick = function () {
-                            var lastTick = jQuery.now();
+                            var lastTick = null;
 
                             return function () {
                                 var now = jQuery.now();
-                                var deltaTime = (now - lastTick) / 1000;
+                                var deltaTime = lastTick ? (now - lastTick) / 1000 : 0;
                                 lastTick = now;
-
-                                if ($scope.dragging) {
-                                    return true; // do nothing but keep timer alive
-                                }
 
                                 if ($scope.zoomAnimation) {
                                     $scope.zoomAnimation.progress += deltaTime / $scope.zoomAnimation.duration;
@@ -287,18 +285,19 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 }
 
                                 if ($scope.panVelocity) {
-                                    while (deltaTime > 0) { // prevent overshooting if delta time is large for some reason. We apply the simple solution of slicing delta time into smaller pieces and applying each one
+                                    // prevent overshooting if delta time is large for some reason. We apply the simple solution of
+                                    // slicing delta time into smaller pieces and applying each one
+                                    while (deltaTime > 0) {
                                         var dTime = Math.min(0.02, deltaTime);
                                         deltaTime -= dTime;
 
-                                        $scope.base.pan.x += $scope.panVelocity.x * dTime; // FIXME reintroduce
+                                        $scope.base.pan.x += $scope.panVelocity.x * dTime;
                                         $scope.panVelocity.x *= (1 - $scope.config.friction * dTime);
 
                                         $scope.base.pan.y += $scope.panVelocity.y * dTime;
                                         $scope.panVelocity.y *= (1 - $scope.config.friction * dTime);
 
                                         var speed = length($scope.panVelocity);
-
                                         if (speed < $scope.config.haltSpeed) {
                                             $scope.panVelocity = undefined;
 
@@ -311,14 +310,31 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                                 syncModelToDOM();
 
-                                // FIXME actually we should kill the timer when unused, i.e. when animation has stopped. We should resurrect it as needed.
-                                return true; // keep timer alive
+                                var doneAnimating = $scope.panVelocity === undefined && $scope.zoomAnimation === undefined;
+                                if (doneAnimating) {
+                                    tick.isRegistered = false;
+                                    lastTick = null;
+                                    return false; // kill the tick for now
+                                } else {
+                                    return !scopeIsDestroyed; // kill the tick for good if the directive goes off the page
+                                }
                             };
                         };
                         syncModelToDOM();
                         var tick = new AnimationTick();
-                        jQuery.fx.timer(tick);
+                        tick.isRegistered = false;
 
+                        function wakeupAnimationTick() {
+                            if (!tick.isRegistered) {
+                                jQuery.fx.timer(tick);
+                                tick.isRegistered = true;
+                            }
+                        }
+
+                        $scope.$on('$destroy', function () {
+                            PanZoomService.unregisterAPI($scope.elementId);
+                            scopeIsDestroyed = true;
+                        });
                         // event handlers
 
                         $scope.onDblClick = function ($event) {
@@ -355,13 +371,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                             syncModelToDOM();
                         };
-                        $scope.model.pan = pan;
 
                         $scope.onMousemove = function ($event) {
-                            if (!$scope.dragging) {
-                                // return;
-                            }
-
                             var now = jQuery.now();
                             var timeSinceLastMouseEvent = (now - lastMouseEventTime) / 1000;
                             lastMouseEventTime = now;
@@ -370,7 +381,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 y: $event.pageY - previousPosition.y
                             };
                             pan(dragDelta);
-
 
                             // set these for the animation slow down once drag stops
                             $scope.panVelocity = {
@@ -382,7 +392,6 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                                 x: $event.pageX,
                                 y: $event.pageY
                             };
-                            $event.preventDefault();
                         };
 
                         $scope.onMouseup = function () {
@@ -400,6 +409,7 @@ angular.module('panzoom', ['monospaced.mousewheel'])
                             }
 
                             $scope.dragging = false;
+                            wakeupAnimationTick();
 
                             $document.off('mousemove', $scope.onMousemove);
                             $document.off('mouseup', $scope.onMouseup);
@@ -446,9 +456,9 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
   }],
                 link: function (scope, element, attrs, controllers) {
-                    var elementId = element.attr('id');
-                    if (elementId) {
-                        PanZoomService.registerAPI(elementId, api);
+                    scope.elementId = element.attr('id');
+                    if (scope.elementId) {
+                        PanZoomService.registerAPI(scope.elementId, api);
                     }
                 },
                 template: '<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +
@@ -567,9 +577,9 @@ angular.module('panzoomwidget', [])
                     '<div ng-click="zoomIn()" ng-mouseenter="zoomToLevelIfDragging(config.zoomLevels - 1)" class="zoom-button zoom-button-in">+</div>' +
                     '<div class="zoom-slider" ng-mousedown="onMousedown()" ' +
                     'ng-click="onClick($event)">' +
-                    '<div class="zoom-slider-widget" style="height:{{widgetConfig.zoomLevelHeight - 2}}px"></div>' +
-                    '<div ng-repeat="zoomLevel in getZoomLevels()" "' +
-                    ' class="zoom-level zoom-level-{{zoomLevel}}" style="height:{{widgetConfig.zoomLevelHeight}}px"></div>' +
+                    '<div class="zoom-slider-widget" ng-style="{\'height\': widgetConfig.zoomLevelHeight - 2 +\'px\'}"></div>' +
+                    '<div ng-repeat="zoomLevel in getZoomLevels()" ' +
+                    ' class="zoom-level zoom-level-{{zoomLevel}}" ng-style="{\'height\': widgetConfig.zoomLevelHeight +\'px\'}"></div>' +
                     '</div>' +
                     '<div ng-click="zoomOut()" ng-mouseenter="zoomToLevelIfDragging(0)" class="zoom-button zoom-button-out">-</div>' +
                     '<div ng-transclude></div>' +
@@ -596,6 +606,10 @@ angular.module('panzoom').factory('PanZoomService', ['$q',
             }
         };
 
+        var unregisterAPI = function (key, panZoomAPI) {
+            delete panZoomAPIs[key];
+        };
+
         // this method returns a promise since it's entirely possible that it's called before the <panzoom> directive registered the API
         var getAPI = function (key) {
             if (!panZoomAPIs[key]) {
@@ -607,6 +621,7 @@ angular.module('panzoom').factory('PanZoomService', ['$q',
 
         return {
             registerAPI: registerAPI,
+            unregisterAPI: unregisterAPI,
             getAPI: getAPI
         };
 }]);
