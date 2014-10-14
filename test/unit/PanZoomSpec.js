@@ -110,52 +110,43 @@ describe('PanZoom specs', function () {
         expect($(element).find('.pan-zoom-contents').css('-webkit-transform')).toBe('scale(1)');
     });
 
-    //    it('Should pan when the mouse is dragged', function () {
-    //        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
-    //        $compile(element)($scope);
-    //        $scope.$digest();
-    //
-    //        element.find('#WrappedElement').trigger(new MouseEvent('mousedown', {
-    //            view: window,
-    //            bubbles: true,
-    //            cancelable: true,
-    //            clientX: 100,
-    //            clientY: 100
-    //        }));
-    //
-    //        expect($scope.panzoomModel.pan).toEqual({
-    //            x: 0,
-    //            y: 0
-    //        });
-    //
-    //        now += 40;
-    //        $document.trigger(new MouseEvent('mousemove', {
-    //            view: window,
-    //            bubbles: true,
-    //            cancelable: true,
-    //            clientX: 110,
-    //            clientY: 100
-    //        }));
-    //
-    //        expect($scope.panzoomModel.pan).toEqual({
-    //            x: 10,
-    //            y: 0
-    //        });
-    //
-    //        $document.trigger(new MouseEvent('mouseup', {
-    //            view: window,
-    //            bubbles: true,
-    //            cancelable: true
-    //        }));
-    //
-    //        for (var i = 0; i < 10; i++) {
-    //            $interval.flush(jQuery.fx.interval);
-    //            now += jQuery.fx.interval;
-    //        }
-    //
-    //        expect($scope.panzoomModel.pan.x).toBeGreaterThan(10); // due to sliding effects
-    //        expect($scope.panzoomModel.pan.y).toEqual(0);
-    //    });
+    it('Should pan when the mouse is dragged', function () {
+        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+        $compile(element)($scope);
+        $scope.$digest();
+
+        function createMouseEvent(type, clientX, clientY) {
+            var e = document.createEvent('MouseEvents');
+            // type, canBubble, cancelable, view,  detail, screenX, screenY, clientX, clientY,  ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget
+            e.initMouseEvent(type, true, true, window, 1, 0, 0, clientX || 0, clientY || 0, false, false, false, false, 0, null);
+            return e;
+        }
+
+        element.find('#WrappedElement').trigger(createMouseEvent('mousedown', 100, 100));
+
+        expect($scope.panzoomModel.pan).toEqual({
+            x: 0,
+            y: 0
+        });
+
+        now += 40; // pretend that time passed
+        $document.trigger(createMouseEvent('mousemove', 110, 100));
+
+        expect($scope.panzoomModel.pan).toEqual({
+            x: 10,
+            y: 0
+        });
+
+        $document.trigger(createMouseEvent('mouseup'));
+
+        for (var i = 0; i < 10; i++) {
+            $interval.flush(jQuery.fx.interval);
+            now += jQuery.fx.interval;
+        }
+
+        expect($scope.panzoomModel.pan.x).toBeGreaterThan(10); // due to sliding effects; specific value doesn't matter
+        expect($scope.panzoomModel.pan.y).toEqual(0);
+    });
 
     it('should publish and unpublish its API', function () {
         var _this = this;
@@ -207,7 +198,7 @@ describe('PanZoom specs', function () {
         PanZoomService.getAPI('PanZoomElementId').then(function (api) {
             api.zoomIn();
 
-            expect(timerId).toBeDefined; // the native tick loop has been started for the duration of the zoom
+            expect(timerId).toBeDefined(); // the native tick loop has been started for the duration of the zoom
 
             $interval.flush(500); // wait for zoom animation to complete
 
