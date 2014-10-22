@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.1-snapshot
+ AngularJS pan/zoom v1.0.2-snapshot
  (c) 2014 Martin Vindahl Olsen
  License: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
@@ -326,8 +326,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
 
                         function wakeupAnimationTick() {
                             if (!tick.isRegistered) {
+                                tick.isRegistered = true; // must be set before registering the timer as registration triggers an immediate tick
                                 jQuery.fx.timer(tick);
-                                tick.isRegistered = true;
                             }
                         }
 
