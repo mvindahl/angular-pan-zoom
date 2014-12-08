@@ -105,7 +105,7 @@ Method                           | Description
 -------------------------------- | -----------
 `model`                          | the model object which was passed to the panzoom directive
 `config`                         | the config object which was passed to the panzoom directive
-`changeZoomLevel()`              | change zoom level to a new value using a quick animation
+`changeZoomLevel(newZoomLevel [,clickPoint])`              | change zoom level to a new value using a quick animation
 `zoomIn()`                       | shorthand for increasing zoom level by one
 `zoomOut()`                      | shorthand for decreasing zoom level by one
 `zoomToFit(rectangle)`           | zoom to display a part of the contents. Example rectangle: { "x": 0, "y": 100, "width": 100, "height": 100 }
