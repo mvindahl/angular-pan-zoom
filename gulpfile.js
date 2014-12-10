@@ -1,12 +1,6 @@
 /*
  * You need gulp and various dependencies in order to run this. You can get these using
- * npm by executing the following commands in sequence:
- *
- * npm install gulp
- * npm install gulp-concat
- * npm install gulp-uglify
- * npm install gulp-jshint
- * npm install jshint-stylish
+ * npm by executing npm install which will install all dependencies found in package.js
  *
  */
 
