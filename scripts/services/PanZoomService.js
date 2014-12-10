@@ -10,14 +10,14 @@ angular.module('panzoom').factory('PanZoomService', ['$q',
 
             var deferred = panZoomAPIs[key];
             if (deferred.hasBeenResolved) {
-                throw "Internal error: attempt to register a panzoom API but key was already used. Did you declare two <panzoom> directives with the same id?";
+                throw 'Internal error: attempt to register a panzoom API but key was already used. Did you declare two <panzoom> directives with the same id?';
             } else {
                 deferred.resolve(panZoomAPI);
                 deferred.hasBeenResolved = true;
             }
         };
 
-        var unregisterAPI = function (key, panZoomAPI) {
+        var unregisterAPI = function (key) {
             delete panZoomAPIs[key];
         };
 

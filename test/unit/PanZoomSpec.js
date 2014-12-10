@@ -148,6 +148,21 @@ describe('PanZoom specs', function () {
         expect($scope.panzoomModel.pan.y).toEqual(0);
     });
 
+    it('should use {{interpolated}} value for panzoomid', function() {
+      var element = angular.element('<panzoom id="{{panZoomElementId}}" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+
+      $scope.panZoomElementId = "panZoom1";
+
+      $compile(element)($scope);
+
+      var handler = jasmine.createSpy('success');
+      PanZoomService.getAPI('panZoom1').then(handler);
+
+      $scope.$digest();
+
+      expect(handler).toHaveBeenCalled();
+    });
+
     it('should publish and unpublish its API', function () {
         var _this = this;
 
