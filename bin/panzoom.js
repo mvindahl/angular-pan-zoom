@@ -1,3 +1,8 @@
+/*!
+ AngularJS pan/zoom v1.0.3
+ License: MIT
+ Github: https://github.com/mvindahl/angular-pan-zoom
+*/
 angular.module('panzoom', ['monospaced.mousewheel'])
 .directive('panzoom', ['$document', 'PanZoomService',
 function ($document, PanZoomService) {
