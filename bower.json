@@ -19,7 +19,7 @@
     ],
     "dependencies": {
         "angular": "1.2.6",
-        "jQuery": "1.11.0",
+        "jquery": "1.11.0",
         "hamsterjs": "1.0.4",
         "angular-mousewheel": "1.0.4"
     },
