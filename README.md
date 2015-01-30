@@ -68,7 +68,7 @@ In your markup:
   <script src="bower_components/hamsterjs/hamster.js"></script>
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-mousewheel/mousewheel.js"></script>
-  <script src="bin/panzoom.js"></script>
+  <script src="release/panzoom.js"></script>
 </body>
 ```
 
@@ -77,7 +77,7 @@ This will provide zoom and pan functionality using default settings. It will, ho
 ### Using the provided zoom pan widget
 
 To use the bundled `<panzoomwidget>`, you need to
-- include bin/panzoomwidget.css on your page
+- include release/panzoomwidget.css on your page
 - make your AngularJS module depend upon the panzoomwidget module
 - declare an `id` attribute on your `<panzoom>` tag
 - use a `<panzoomwidget>` directive in the markup, specifying its `panzoom-id` attribute to be the same value as the `id` of the `<panzoom>` tag
