@@ -5,7 +5,6 @@
     "devDependencies": {
         "gulp": "~3.4.0",
         "gulp-concat": "~2.1.7",
-        "gulp-karma": "~0.0.4",
         "gulp-sass": "~0.7.1",
         "gulp-uglify": "~0.2.1",
         "jshint": "latest",
@@ -27,7 +26,10 @@
     "scripts": {
         "env": "env",
         "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js ./scripts/**/*.js",
-        "test": "./node_modules/karma/bin/karma start test/karma.conf.phantom.js"
+        "test": "karma start test/karma.conf.js",
+        "test:watch": "karma start test/karma.conf.js --auto-watch --no-single-run",
+        "test:chrome": "karma start test/karma.conf.js --browsers Chrome",
+        "test:chrome:watch": "karma start test/karma.conf.js --browsers Chrome --auto-watch --no-single-run"
     },
     "repository": {
         "type": "git",
