@@ -7,8 +7,6 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
 var sass = require('gulp-sass');
 var karma = require('gulp-karma');
 
@@ -27,13 +25,6 @@ gulp.task('default', function () {
     gulp.src('./scss/*.scss')
         .pipe(sass())
         .pipe(gulp.dest('./build'));
-});
-
-gulp.task('jshint', function () {
-    // see .jshintrc for configuration
-    gulp.src('./scripts/**/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
 });
 
 var testFiles = [ // FIXME this is duplicated in karma.conf.js, can we lose it here?

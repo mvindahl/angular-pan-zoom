@@ -5,12 +5,11 @@
     "devDependencies": {
         "gulp": "~3.4.0",
         "gulp-concat": "~2.1.7",
-        "gulp-jshint": "~1.5.0",
         "gulp-karma": "~0.0.4",
         "gulp-sass": "~0.7.1",
         "gulp-uglify": "~0.2.1",
-        "jshint": "^2.6.0",
-        "jshint-stylish": "~0.1.5",
+        "jshint": "latest",
+        "jshint-stylish": "latest",
         "karma": "~0.12.0",
         "karma-chrome-launcher": "~0.1",
         "karma-coverage": "~0.1.0",
@@ -27,7 +26,7 @@
     },
     "scripts": {
         "env": "env",
-        "lint": "jshint ./scripts/**/*.js",
+        "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js ./scripts/**/*.js",
         "test": "./node_modules/karma/bin/karma start test/karma.conf.phantom.js"
     },
     "repository": {
