@@ -3,10 +3,6 @@
     "version": "1.0.5",
     "dependencies": {},
     "devDependencies": {
-        "gulp": "~3.4.0",
-        "gulp-concat": "~2.1.7",
-        "gulp-sass": "~0.7.1",
-        "gulp-uglify": "~0.2.1",
         "jshint": "latest",
         "jshint-stylish": "latest",
         "karma": "~0.12.0",
@@ -18,18 +14,25 @@
         "karma-mocha-reporter": "~0.2.2",
         "karma-ng-scenario": "~0.1",
         "karma-phantomjs-launcher": "~0.1",
-        "karma-safari-launcher": "~0.1"
+        "karma-safari-launcher": "~0.1",
+        "node-sass": "^2.0.0-beta",
+        "uglify-js": "^2.4.16"
     },
     "engines": {
         "node": ">=0.10.0"
     },
     "scripts": {
-        "env": "env",
+        "prebuild": "npm run lint && npm run test",
+        "build": "npm run build:js && npm run build:js:minified && npm run build:css",
+        "build:js": "cat scripts/directives/*.js scripts/services/*.js > build/panzoom.js",
+        "build:js:minified": "uglifyjs scripts/directives/*.js scripts/services/*.js --comments > build/panzoom.min.js",
+        "build:css": "node-sass scss/panzoomwidget.scss build/panzoomwidget.css",
         "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js ./scripts/**/*.js",
         "test": "karma start test/karma.conf.js",
         "test:watch": "karma start test/karma.conf.js --auto-watch --no-single-run",
         "test:chrome": "karma start test/karma.conf.js --browsers Chrome",
-        "test:chrome:watch": "karma start test/karma.conf.js --browsers Chrome --auto-watch --no-single-run"
+        "test:chrome:watch": "karma start test/karma.conf.js --browsers Chrome --auto-watch --no-single-run",
+        "env": "env"
     },
     "repository": {
         "type": "git",

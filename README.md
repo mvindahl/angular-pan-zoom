@@ -139,13 +139,6 @@ Bower is used for obtaining 3rd party libraries. The libraries in bower_componen
 also committed along with the project. A 1:1 correspondence between bower.json and the
 contents of bower_components is expected at all times.
 
-Gulp is used for building the minified files and for running jshint. The gulpfile.js contains
-instructions for installing npm dependencies. Please commit an up-to-date minified file along with your code,
-and please make sure that the code passes jshint. The rules are not overly Nazi.
-
-Oh, and the unit tests. You can run gulp test to see if they pass. [TBD: More tests]
-
-
-
-
-
+Npm is used for building stuff. Use `npm install` to fetch dependencies. Use `npm run build` to do a complete
+build, as verified by jshint and karma tests. The build artefacts will end up in the bin folder.
+For the complete list of npm scripts, see package.json.
