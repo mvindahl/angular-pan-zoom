@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.5-snapshot
+ AngularJS pan/zoom v1.0.6
  @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */
@@ -355,7 +355,6 @@ function ($document, PanZoomService) {
                                 };
                                 lastMouseEventTime = jQuery.now();
                                 $scope.dragging = true;
-
                                 $document.on('mousemove', $scope.onMousemove);
                                 $document.on('mouseup', $scope.onMouseup);
                             }
