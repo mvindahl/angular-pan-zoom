@@ -1,5 +1,5 @@
 /*
- * Hamster.js v1.0.4
+ * Hamster.js v1.0.5
  * (c) 2013 Monospaced http://monospaced.com
  * License: MIT
  */
@@ -201,7 +201,7 @@ Hamster.normalise = {
    * @returns {Object}      event
    */
    event: function normaliseEvent(originalEvent){
-    var event = Hamster.SUPPORT === 'wheel' ? originalEvent : {
+    var event = {
           // keep a reference to the original event object
           originalEvent: originalEvent,
           target: originalEvent.target || originalEvent.srcElement,

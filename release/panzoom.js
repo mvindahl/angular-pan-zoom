@@ -1,6 +1,6 @@
 /*!
- AngularJS pan/zoom v1.0.5
- License: MIT
+ AngularJS pan/zoom v1.0.5-snapshot
+ @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */
 angular.module('panzoom', ['monospaced.mousewheel'])
@@ -354,6 +354,7 @@ function ($document, PanZoomService) {
                                     y: $event.pageY
                                 };
                                 lastMouseEventTime = jQuery.now();
+                                console.log('dragging -> true');
                                 $scope.dragging = true;
 
                                 $document.on('mousemove', $scope.onMousemove);
@@ -473,7 +474,6 @@ function ($document, PanZoomService) {
                 replace: true
             };
     }]);
-
 angular.module('panzoomwidget', [])
     .directive('panzoomwidget', ['$document', 'PanZoomService',
 function ($document, PanZoomService) {
@@ -588,7 +588,6 @@ function ($document, PanZoomService) {
                 replace: true
             };
 }]);
-
 angular.module('panzoom').factory('PanZoomService', ['$q',
     function ($q) {
         // key -> deferred with promise of API

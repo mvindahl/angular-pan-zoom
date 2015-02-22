@@ -135,10 +135,5 @@ Contributing to the project:
 ----------------------------
 Any code contributions to the project will be appreciated. A few guidelines follow.
 
-Bower is used for obtaining 3rd party libraries. The libraries in bower_components are
-also committed along with the project. A 1:1 correspondence between bower.json and the
-contents of bower_components is expected at all times.
-
-Npm is used for building stuff. Use `npm install` to fetch dependencies. Use `npm run build` to do a complete
-build, as verified by jshint and karma tests. The build artefacts will end up in the bin folder.
+Npm is used for building stuff. Use `npm install` to fetch dependencies (including the bower ones). Use `npm start` to launch a development server using browsersync. Use 'npm run build' to perform a build as verified by uni tests and lint.
 For the complete list of npm scripts, see package.json.

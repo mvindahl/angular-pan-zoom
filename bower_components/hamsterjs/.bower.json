@@ -1,6 +1,6 @@
 {
   "name": "hamsterjs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "hamster.js",
   "ignore": [
     "**/.*",
@@ -8,13 +8,13 @@
     "components"
   ],
   "homepage": "https://github.com/monospaced/hamster.js",
-  "_release": "1.0.4",
+  "_release": "1.0.5",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.4",
-    "commit": "70d915645187db8b42b4b47fae40212674c21b4b"
+    "tag": "v1.0.5",
+    "commit": "4e337c126f86bb243c3be2b2c2ec30d93357288e"
   },
   "_source": "git://github.com/monospaced/hamster.js.git",
-  "_target": "1.0.4",
+  "_target": "^1.0.5",
   "_originalSource": "hamsterjs"
 }

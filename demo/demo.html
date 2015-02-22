@@ -13,17 +13,17 @@
     <div style="position:relative">
         <panzoomwidget panzoom-id="PanZoom" style="position:absolute;top:10px;left:10px;z-index:1"></panzoomwidget>
         <panzoom id="PanZoom" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px">
-            <img src="images/shark_attack.jpg" />
+            <img src="images/shark_attack.jpg" style="-webkit-user-drag: none" />
         </panzoom>
     </div>
 </body>
 
-<script src="../bower_components/jQuery/dist/jquery.js"></script>
-<script src="../bower_components/hamsterjs/hamster.js"></script>
-<script src="../bower_components/angular/angular.min.js"></script>
-<script src="../bower_components/angular-mousewheel/mousewheel.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://monospaced.github.io/hamster.js/hamster.js"></script>
+<script src="https://code.angularjs.org/1.3.13/angular.min.js"></script>
+<script src="http://monospaced.github.io/angular-mousewheel/mousewheel.js"></script>
 
-<script src="../build/panzoom.js"></script>
+<script src="../release/panzoom.js"></script>
 <script src="../scripts/controllers/TestController.js"></script>
 
 </html>

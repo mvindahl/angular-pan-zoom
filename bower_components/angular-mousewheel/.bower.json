@@ -19,6 +19,6 @@
     "commit": "d07b6bbab8394a2703653e27ce744acad0dca56a"
   },
   "_source": "git://github.com/monospaced/angular-mousewheel.git",
-  "_target": "1.0.4",
+  "_target": "^1.0.4",
   "_originalSource": "angular-mousewheel"
 }
