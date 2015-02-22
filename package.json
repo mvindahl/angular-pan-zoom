@@ -1,50 +1,51 @@
 {
-    "name": "angular-pan-zoom",
-    "version": "1.0.5",
-    "dependencies": {},
-    "devDependencies": {
-        "browser-sync": "^2.1.6",
-        "jshint": "latest",
-        "jshint-stylish": "latest",
-        "karma": "~0.12.0",
-        "karma-chrome-launcher": "~0.1",
-        "karma-coverage": "~0.1.0",
-        "karma-firefox-launcher": "~0.1",
-        "karma-jasmine": "~0.1",
-        "karma-junit-reporter": "~0.2.1",
-        "karma-mocha-reporter": "~0.2.2",
-        "karma-ng-scenario": "~0.1",
-        "karma-phantomjs-launcher": "~0.1",
-        "karma-safari-launcher": "~0.1",
-        "node-sass": "^2.0.1",
-        "uglify-js": "^2.4.16",
-        "watch": "^0.14.0"
-    },
-    "engines": {
-        "node": ">=0.10.0"
-    },
-    "scripts": {
-        "postinstall": "bower install",
-        "start": "npm run build:js:watch & npm run build:css:watch & browser-sync start --server --files \"demo/*,build/*\" --startPath \"demo/demo.dev.html\"",
-        "prebuild": "npm run lint && npm run test",
-        "build": "npm run build:js && npm run build:js:minified && npm run build:css",
-        "build:js": "cat scripts/directives/*.js scripts/services/*.js | sed \"s/{VERSION}/$npm_package_version/g\" > build/panzoom.js",
-        "build:js:watch": "watch 'npm run build:js' scripts",
-        "prebuild:js:minified": "npm run build:js",
-        "build:js:minified": "uglifyjs build/panzoom.js --comments > build/panzoom.min.js",
-        "build:css": "node-sass scss/panzoomwidget.scss build/panzoomwidget.css",
-        "build:css:watch": "watch 'npm run build:css' scss",
-        "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js ./scripts/**/*.js",
-        "test": "node_modules/karma/bin/karma start test/karma.conf.js # must spell out path for Travis CI",
-        "test:watch": "karma start test/karma.conf.js --auto-watch --no-single-run",
-        "test:chrome": "karma start test/karma.conf.js --browsers Chrome",
-        "test:chrome:watch": "karma start test/karma.conf.js --browsers Chrome --auto-watch --no-single-run",
-        "bower:json:versionsync": "sed -i.bu \"s/\\\"version\\\": \\\"[^\\\"]*/\\\"version\\\": \\\"$npm_package_version/g\" bower.json && rm bower.json.bu",
-        "prerelease": "npm run build",
-        "release": "rm release/* && cp build/* release && cp release/* bin && npm run bower:json:versionsync"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/mvindahl/repository.git"
-    }
+  "name": "angular-pan-zoom",
+  "version": "1.0.5",
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "^1.3.12",
+    "browser-sync": "^2.1.6",
+    "jshint": "latest",
+    "jshint-stylish": "latest",
+    "karma": "~0.12.0",
+    "karma-chrome-launcher": "~0.1",
+    "karma-coverage": "~0.1.0",
+    "karma-firefox-launcher": "~0.1",
+    "karma-jasmine": "~0.1",
+    "karma-junit-reporter": "~0.2.1",
+    "karma-mocha-reporter": "~0.2.2",
+    "karma-ng-scenario": "~0.1",
+    "karma-phantomjs-launcher": "~0.1",
+    "karma-safari-launcher": "~0.1",
+    "node-sass": "^2.0.1",
+    "uglify-js": "^2.4.16",
+    "watch": "^0.14.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "postinstall": "bower install",
+    "start": "npm run build:js:watch & npm run build:css:watch & browser-sync start --server --files \"demo/*,build/*\" --startPath \"demo/demo.dev.html\"",
+    "prebuild": "npm run lint && npm run test",
+    "build": "npm run build:js && npm run build:js:minified && npm run build:css",
+    "build:js": "cat scripts/directives/*.js scripts/services/*.js | sed \"s/{VERSION}/$npm_package_version/g\" > build/panzoom.js",
+    "build:js:watch": "watch 'npm run build:js' scripts",
+    "prebuild:js:minified": "npm run build:js",
+    "build:js:minified": "uglifyjs build/panzoom.js --comments > build/panzoom.min.js",
+    "build:css": "node-sass scss/panzoomwidget.scss build/panzoomwidget.css",
+    "build:css:watch": "watch 'npm run build:css' scss",
+    "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js ./scripts/**/*.js",
+    "test": "node_modules/karma/bin/karma start test/karma.conf.js # must spell out path for Travis CI",
+    "test:watch": "karma start test/karma.conf.js --auto-watch --no-single-run",
+    "test:chrome": "karma start test/karma.conf.js --browsers Chrome",
+    "test:chrome:watch": "karma start test/karma.conf.js --browsers Chrome --auto-watch --no-single-run",
+    "bower:json:versionsync": "sed -i.bu \"s/\\\"version\\\": \\\"[^\\\"]*/\\\"version\\\": \\\"$npm_package_version/g\" bower.json && rm bower.json.bu",
+    "prerelease": "npm run build",
+    "release": "rm release/* && cp build/* release && cp release/* bin && npm run bower:json:versionsync"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mvindahl/repository.git"
+  }
 }
