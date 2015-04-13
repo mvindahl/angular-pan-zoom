@@ -18,7 +18,8 @@ function ($document, PanZoomService) {
                 controller: ['$scope', '$element',
     function ($scope, $element) {
                         var frameElement = $element;
-                        var contentElement = $element.find('.pan-zoom-contents');
+                        var panElement = $element.find('.pan-element');
+                        var zoomElement = $element.find('.zoom-element');
 
                         var getCssScale = function (zoomLevel) {
                             return Math.pow($scope.config.scalePerZoomLevel, zoomLevel - $scope.config.neutralZoomLevel);
@@ -116,16 +117,33 @@ function ($document, PanZoomService) {
                                 $scope.model.pan.y = $scope.base.pan.y;
                             }
 
-                            var scaleString = 'scale(' + getCssScale($scope.model.zoomLevel) + ')';
+                            var scale = getCssScale($scope.model.zoomLevel);
+                            if (navigator.userAgent.indexOf('Chrome') !== -1) {
+                                // For Chrome, use the zoom style as it doesn't handle nested SVG very well
+                                // when using transform
 
-                            contentElement.css('transform-origin', '0 0');
-                            contentElement.css('ms-transform-origin', '0 0');
-                            contentElement.css('webkit-transform-origin', '0 0');
-                            contentElement.css('transform', scaleString);
-                            contentElement.css('ms-transform', scaleString);
-                            contentElement.css('webkit-transform', scaleString);
-                            contentElement.css('left', $scope.model.pan.x);
-                            contentElement.css('top', $scope.model.pan.y);
+                                // http://caniuse.com/#search=zoom
+                                zoomElement.css('zoom', scale);
+                            } else {
+                                // Special handling of IE, as it doesn't support the zoom style
+                                // http://caniuse.com/#search=transform
+
+                                var scaleString = 'scale(' + scale + ')';
+                                // IE 9.0
+                                zoomElement.css('ms-transform-origin', '0 0');
+                                zoomElement.css('ms-transform', scaleString);
+
+                                // IE > 9.0
+                                zoomElement.css('transform-origin', '0 0');
+                                zoomElement.css('transform', scaleString);
+
+                                // Safari etc..
+                                zoomElement.css('webkit-transform-origin', '0 0');
+                                zoomElement.css('webkit-transform', scaleString);
+                            }
+
+                            panElement.css('left', $scope.model.pan.x);
+                            panElement.css('top', $scope.model.pan.y);
                         };
 
                         var getCenterPoint = function () {
@@ -465,9 +483,10 @@ function ($document, PanZoomService) {
                 template: '<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +
                     ' msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
                     ' style="position:relative;overflow:hidden;cursor:move">' +
-                    '<div class="pan-zoom-contents" style="position:absolute;left:0px;top:0px" ng-transclude>' +
-                // transcluded contents will be inserted here
-                '</div>' +
+                    '<div class="pan-element" style="position:absolute;left:0px;top:0px">' +
+                    '<div class="zoom-element" ng-transclude>' +
+                    '</div>' +
+                    '</div>' +
                     '</div>',
                 replace: true
             };

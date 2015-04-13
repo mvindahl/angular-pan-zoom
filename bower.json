@@ -1,6 +1,5 @@
 {
     "name": "angular-pan-zoom",
-    "version": "1.0.6",
     "main": "release/panzoom.min.js",
     "ignore": [
     "*.launch",

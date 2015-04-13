@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.6
+ AngularJS pan/zoom v1.0.7
  @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */

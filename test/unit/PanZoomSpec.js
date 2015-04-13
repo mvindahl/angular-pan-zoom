@@ -89,7 +89,7 @@ describe('PanZoom specs', function () {
         var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>');
         $compile(element)($scope);
         $scope.$digest();
-        expect(element.html()).toMatch(/<div class="pan-zoom-contents".*<\/div>/);
+        expect(element.html()).toMatch(/<div.*<\/div>/);
     });
 
     it('should not zoom when using neutral zoom level', function () {
@@ -99,7 +99,7 @@ describe('PanZoom specs', function () {
         $compile(element)($scope);
         $scope.$digest();
 
-        expect($(element).find('.pan-zoom-contents').css('-webkit-transform')).toBe('scale(1)');
+        expect($(element).find('.zoom-element').css('-webkit-transform')).toBe('scale(1)');
 
         $scope.panzoomConfig.neutralZoomLevel = 5;
         $scope.panzoomConfig.initialZoomLevel = 5;
@@ -107,7 +107,7 @@ describe('PanZoom specs', function () {
         $compile(element)($scope);
         $scope.$digest();
 
-        expect($(element).find('.pan-zoom-contents').css('-webkit-transform')).toBe('scale(1)');
+        expect($(element).find('.zoom-element').css('-webkit-transform')).toBe('scale(1)');
     });
 
     it('Should pan when the mouse is dragged', function () {
@@ -148,19 +148,19 @@ describe('PanZoom specs', function () {
         expect($scope.panzoomModel.pan.y).toEqual(0);
     });
 
-    it('should use {{interpolated}} value for panzoomid', function() {
-      var element = angular.element('<panzoom id="{{panZoomElementId}}" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+    it('should use {{interpolated}} value for panzoomid', function () {
+        var element = angular.element('<panzoom id="{{panZoomElementId}}" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
 
-      $scope.panZoomElementId = "panZoom1";
+        $scope.panZoomElementId = "panZoom1";
 
-      $compile(element)($scope);
+        $compile(element)($scope);
 
-      var handler = jasmine.createSpy('success');
-      PanZoomService.getAPI('panZoom1').then(handler);
+        var handler = jasmine.createSpy('success');
+        PanZoomService.getAPI('panZoom1').then(handler);
 
-      $scope.$digest();
+        $scope.$digest();
 
-      expect(handler).toHaveBeenCalled();
+        expect(handler).toHaveBeenCalled();
     });
 
     it('should publish and unpublish its API', function () {
