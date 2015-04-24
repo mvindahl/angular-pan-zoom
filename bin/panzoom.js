@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.7
+ AngularJS pan/zoom v1.0.8
  @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */
@@ -448,8 +448,8 @@ function ($document, PanZoomService) {
                                 }
 
                                 var clickPoint = {
-                                    x: $event.pageX - frameElement.offset().left,
-                                    y: $event.pageY - frameElement.offset().top
+                                    x: $event.originalEvent.pageX - frameElement.offset().left,
+                                    y: $event.originalEvent.pageY - frameElement.offset().top
                                 };
 
                                 if (sign < 0) {
