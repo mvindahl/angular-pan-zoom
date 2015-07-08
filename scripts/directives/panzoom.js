@@ -394,6 +394,7 @@ function ($document, PanZoomService) {
 
                         function onTouchMove($event) {
                             $event.preventDefault();
+
                             if ($event.originalEvent.touches.length === 1) {
                                 // single touch, emulate mouse move
                                 $event.pageX = $event.originalEvent.touches[0].pageX;
@@ -443,10 +444,7 @@ function ($document, PanZoomService) {
                         }
 
                         function onTouchEnd($event) {
-                            if ($event.originalEvent.touches.length === 1) {
-                                // single touch, emulate mouse up
-                                $scope.onMouseup($event);
-                            }
+                            $scope.onMouseup($event);
                         }
 
                         $element.on('touchstart', onTouchStart);
