@@ -35,7 +35,7 @@
         "build:js:minified": "uglifyjs build/panzoom.js --comments > build/panzoom.min.js",
         "build:css": "node-sass scss/panzoomwidget.scss build/panzoomwidget.css",
         "build:css:watch": "watch 'npm run build:css' scss",
-        "lint": "jshint --reporter node_modules/jshint-stylish/stylish.js ./scripts/**/*.js",
+        "lint": "jshint --reporter node_modules/jshint-stylish ./scripts/**/*.js",
         "test": "node_modules/karma/bin/karma start test/karma.conf.js # must spell out path for Travis CI",
         "test:watch": "karma start test/karma.conf.js --auto-watch --no-single-run",
         "test:chrome": "karma start test/karma.conf.js --browsers Chrome",
