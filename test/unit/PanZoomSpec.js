@@ -148,6 +148,45 @@ describe('PanZoom specs', function () {
         expect($scope.panzoomModel.pan.y).toEqual(0);
     });
 
+    it('should pan when dragging the finger (touch)', function () {
+        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+        $compile(element)($scope);
+        $scope.$digest();
+
+        function createTouchEvent(type, touches) {
+            var e = document.createEvent('MouseEvents');
+            // type, canBubble, cancelable, view,  detail, screenX, screenY, clientX, clientY,  ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget
+            e.initMouseEvent(type, true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+            e.touches = touches || [];
+            return $.event.fix(e);
+        }
+
+        element.find('#WrappedElement').trigger(createTouchEvent('touchstart', [{pageX: 100, pageY: 100}]));
+
+        expect($scope.panzoomModel.pan).toEqual({
+            x: 0,
+            y: 0
+        });
+
+        now += 40; // pretend that time passed
+        element.find('#WrappedElement').trigger(createTouchEvent('touchmove', [{pageX: 110, pageY: 100}]));
+
+        expect($scope.panzoomModel.pan).toEqual({
+            x: 10,
+            y: 0
+        });
+
+        element.find('#WrappedElement').trigger(createTouchEvent('touchend'));
+
+        for (var i = 0; i < 10; i++) {
+            $interval.flush(jQuery.fx.interval);
+            now += jQuery.fx.interval;
+        }
+
+        expect($scope.panzoomModel.pan.x).toBeGreaterThan(10); // due to sliding effects; specific value doesn't matter
+        expect($scope.panzoomModel.pan.y).toEqual(0);
+    });
+
     it('should use {{interpolated}} value for panzoomid', function () {
         var element = angular.element('<panzoom id="{{panZoomElementId}}" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
 

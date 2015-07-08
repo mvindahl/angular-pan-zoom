@@ -365,6 +365,92 @@ function ($document, PanZoomService) {
                         var lastMouseEventTime;
                         var previousPosition;
 
+                        function onTouchStart($event) {
+                            $event.preventDefault();
+
+                            if ($event.originalEvent.touches.length === 1) {
+                                // single touch, get ready for panning
+
+                                // Touch events does not have pageX and pageY, make touchstart
+                                // emulate a regular click event to re-use mousedown handler
+                                $event.pageX = $event.originalEvent.touches[0].pageX;
+                                $event.pageY = $event.originalEvent.touches[0].pageY;
+                                $scope.onMousedown($event);
+                            } else {
+                                // multiple touches, get ready for zooming
+
+                                // Calculate x and y distance between touch events
+                                var x = $event.originalEvent.touches[0].pageX - $event.originalEvent.touches[1].pageX;
+                                var y = $event.originalEvent.touches[0].pageY - $event.originalEvent.touches[1].pageY;
+
+                                // Calculate length between touch points with pythagoras
+                                // There is no reason to use Math.pow and Math.sqrt as we
+                                // only want a relative length and not the exact one.
+                                previousPosition = {
+                                    length: x * x + y * y
+                                };
+                            }
+                        }
+
+                        function onTouchMove($event) {
+                            $event.preventDefault();
+
+                            if ($event.originalEvent.touches.length === 1) {
+                                // single touch, emulate mouse move
+                                $event.pageX = $event.originalEvent.touches[0].pageX;
+                                $event.pageY = $event.originalEvent.touches[0].pageY;
+                                $scope.onMousemove($event);
+                            } else {
+                                // multiple touches, zoom in/out
+
+                                // Calculate x and y distance between touch events
+                                var x = $event.originalEvent.touches[0].pageX - $event.originalEvent.touches[1].pageX;
+                                var y = $event.originalEvent.touches[0].pageY - $event.originalEvent.touches[1].pageY;
+                                // Calculate length between touch points with pythagoras
+                                // There is no reason to use Math.pow and Math.sqrt as we
+                                // only want a relative length and not the exact one.
+                                var length = x * x + y * y;
+
+                                // Calculate delta between current position and last position
+                                var delta = length - previousPosition.length;
+
+                                // Naive hysteresis
+                                if (Math.abs(delta) < 100) {
+                                    return;
+                                }
+
+                                // Calculate center between touch points
+                                var centerX = $event.originalEvent.touches[1].pageX + x / 2;
+                                var centerY = $event.originalEvent.touches[1].pageY + y / 2;
+
+                                // Calculate zoom center
+                                var clickPoint = {
+                                    x: centerX - frameElement.offset().left,
+                                    y: centerY - frameElement.offset().top
+                                };
+
+                                // Determine whether to zoom in or out
+                                if (delta > 0) {
+                                    zoomIn(clickPoint);
+                                } else {
+                                    zoomOut(clickPoint);
+                                }
+
+                                // Update length for next move event
+                                previousPosition = {
+                                    length: length
+                                };
+                            }
+                        }
+
+                        function onTouchEnd($event) {
+                            $scope.onMouseup($event);
+                        }
+
+                        $element.on('touchstart', onTouchStart);
+                        $element.on('touchend', onTouchEnd);
+                        $element.on('touchmove', onTouchMove);
+
                         $scope.onMousedown = function ($event) {
                             if ($scope.config.panOnClickDrag) {
                                 previousPosition = {
