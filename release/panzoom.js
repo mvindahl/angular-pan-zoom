@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.9
+ AngularJS pan/zoom v1.0.10
  @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */
@@ -15,8 +15,8 @@ function ($document, PanZoomService) {
                     config: '=',
                     model: '='
                 },
-                controller: ['$scope', '$element',
-    function ($scope, $element) {
+                controller: ['$scope', '$element', '$timeout',
+    function ($scope, $element, $timeout) {
                         var frameElement = $element;
                         var panElement = $element.find('.pan-element');
                         var zoomElement = $element.find('.zoom-element');
@@ -329,6 +329,8 @@ function ($document, PanZoomService) {
                                 if (doneAnimating) {
                                     tick.isRegistered = false;
                                     lastTick = null;
+                                    $timeout(function() { /* this will trigger $scope.$apply, so no need to call explicitly */ }, 0);
+                                    
                                     return false; // kill the tick for now
                                 } else {
                                     return !scopeIsDestroyed; // kill the tick for good if the directive goes off the page

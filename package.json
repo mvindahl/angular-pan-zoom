@@ -1,6 +1,6 @@
 {
     "name": "angular-pan-zoom",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "dependencies": {},
     "devDependencies": {
         "bower": "^1.3.12",
