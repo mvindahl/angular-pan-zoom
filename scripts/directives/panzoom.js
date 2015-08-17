@@ -475,6 +475,7 @@ function ($document, PanZoomService) {
                         };
 
                         $scope.onMousemove = function ($event) {
+                            $event.preventDefault();
                             var now = jQuery.now();
                             var timeSinceLastMouseEvent = (now - lastMouseEventTime) / 1000;
                             lastMouseEventTime = now;
