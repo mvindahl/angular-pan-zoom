@@ -120,12 +120,14 @@ function ($document, PanZoomService) {
                             }
 
                             var scale = getCssScale($scope.model.zoomLevel);
+
+                            var scaleString = 'scale(' + scale + ')';
+
                             if (navigator.userAgent.indexOf('Chrome') !== -1) {
                                 // For Chrome, use the zoom style by default, as it doesn't handle nested SVG very well
                                 // when using transform
                                 if( $scope.config.chromeUseTransform ) {
                                     // IE > 9.0
-                                    var scaleString = 'scale(' + scale + ')';
                                     zoomElement.css('transform-origin', '0 0');
                                     zoomElement.css('transform', scaleString);
                                 } else {
@@ -137,7 +139,6 @@ function ($document, PanZoomService) {
                                 // Special handling of IE, as it doesn't support the zoom style
                                 // http://caniuse.com/#search=transform
 
-                                var scaleString = 'scale(' + scale + ')';
                                 // IE 9.0
                                 zoomElement.css('ms-transform-origin', '0 0');
                                 zoomElement.css('ms-transform', scaleString);
