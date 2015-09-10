@@ -53,6 +53,8 @@ function ($document, PanZoomService) {
 
                         $scope.config.invertMouseWheel = $scope.config.invertMouseWheel || false;
 
+                        $scope.config.chromeUseTransform = $scope.config.chromeUseTransform || false;
+
 
                         var calcZoomToFit = function (rect) {
                             // let (W, H) denote the size of the viewport
@@ -118,17 +120,25 @@ function ($document, PanZoomService) {
                             }
 
                             var scale = getCssScale($scope.model.zoomLevel);
-                            if (navigator.userAgent.indexOf('Chrome') !== -1) {
-                                // For Chrome, use the zoom style as it doesn't handle nested SVG very well
-                                // when using transform
 
-                                // http://caniuse.com/#search=zoom
-                                zoomElement.css('zoom', scale);
+                            var scaleString = 'scale(' + scale + ')';
+
+                            if (navigator.userAgent.indexOf('Chrome') !== -1) {
+                                // For Chrome, use the zoom style by default, as it doesn't handle nested SVG very well
+                                // when using transform
+                                if( $scope.config.chromeUseTransform ) {
+                                    // IE > 9.0
+                                    zoomElement.css('transform-origin', '0 0');
+                                    zoomElement.css('transform', scaleString);
+                                } else {
+                                    // http://caniuse.com/#search=zoom
+                                    zoomElement.css('zoom', scale);
+                                }
+
                             } else {
                                 // Special handling of IE, as it doesn't support the zoom style
                                 // http://caniuse.com/#search=transform
 
-                                var scaleString = 'scale(' + scale + ')';
                                 // IE 9.0
                                 zoomElement.css('ms-transform-origin', '0 0');
                                 zoomElement.css('ms-transform', scaleString);
@@ -330,7 +340,7 @@ function ($document, PanZoomService) {
                                     tick.isRegistered = false;
                                     lastTick = null;
                                     $timeout(function() { /* this will trigger $scope.$apply, so no need to call explicitly */ }, 0);
-                                    
+
                                     return false; // kill the tick for now
                                 } else {
                                     return !scopeIsDestroyed; // kill the tick for good if the directive goes off the page
