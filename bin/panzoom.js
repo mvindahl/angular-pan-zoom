@@ -1,5 +1,5 @@
 /*!
- AngularJS pan/zoom v1.0.12
+ AngularJS pan/zoom v1.0.13
  @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */
@@ -45,9 +45,8 @@ function ($document, PanZoomService) {
                         $scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function () {};
                         $scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
                         $scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement || 1.0;
-                        $scope.config.useHardwareAcceleratedPan = $scope.config.useHardwareAcceleratedPan || false;
-                        $scope.config.useHardwareAcceleratedZoom = $scope.config.useHardwareAcceleratedZoom || false;
-
+                        $scope.config.useHardwareAcceleration = $scope.config.useHardwareAcceleration || false;
+                        
                         $scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
                         $scope.config.initialPanX = $scope.config.initialPanX || 0;
                         $scope.config.initialPanY = $scope.config.initialPanY || 0;
