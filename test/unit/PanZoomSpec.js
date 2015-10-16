@@ -77,7 +77,6 @@ describe('PanZoom specs', function () {
         // directive. It can be used to read the current state of pan and zoom. Also, it will
         // contain methods for manipulating this state.
         $scope.panzoomModel = {};
-
     }));
 
     afterEach(function () {
@@ -137,7 +136,7 @@ describe('PanZoom specs', function () {
             y: 0
         });
 
-        $document.trigger(createMouseEvent('mouseup'));
+        $document.trigger(createMouseEvent('mouseup', 120, 120));
 
         for (var i = 0; i < 10; i++) {
             $interval.flush(jQuery.fx.interval);
