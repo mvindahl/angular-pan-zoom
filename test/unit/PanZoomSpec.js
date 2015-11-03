@@ -110,14 +110,19 @@ describe('PanZoom specs', function () {
     });
 
     it('Should pan when the mouse is dragged', function () {
-        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+    	var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
         $compile(element)($scope);
         $scope.$digest();
 
+        var overlay = $document.find('#PanZoomOverlay');
+        
         function createMouseEvent(type, clientX, clientY) {
             var e = document.createEvent('MouseEvents');
             // type, canBubble, cancelable, view,  detail, screenX, screenY, clientX, clientY,  ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget
             e.initMouseEvent(type, true, true, window, 1, 0, 0, clientX || 0, clientY || 0, false, false, false, false, 0, null);
+            e.preventDefault = undefined;
+            e.stopPropagation = undefined;
+            
             return e;
         }
 
@@ -129,14 +134,14 @@ describe('PanZoom specs', function () {
         });
 
         now += 40; // pretend that time passed
-        $document.trigger(createMouseEvent('mousemove', 110, 100));
+        overlay.trigger(createMouseEvent('mousemove', 110, 100));
 
         expect($scope.panzoomModel.pan).toEqual({
             x: 10,
             y: 0
         });
 
-        $document.trigger(createMouseEvent('mouseup', 120, 120));
+        overlay.trigger(createMouseEvent('mouseup', 120, 120));
 
         for (var i = 0; i < 10; i++) {
             $interval.flush(jQuery.fx.interval);
@@ -148,15 +153,21 @@ describe('PanZoom specs', function () {
     });
 
     it('should pan when dragging the finger (touch)', function () {
-        var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
+    	var element = angular.element('<panzoom config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"><div id="WrappedElement"/></panzoom>');
         $compile(element)($scope);
         $scope.$digest();
 
+        var overlay = $document.find('#PanZoomOverlay');
+        
         function createTouchEvent(type, touches) {
             var e = document.createEvent('MouseEvents');
             // type, canBubble, cancelable, view,  detail, screenX, screenY, clientX, clientY,  ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget
             e.initMouseEvent(type, true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
             e.touches = touches || [];
+            
+            e.preventDefault = undefined;
+            e.stopPropagation = undefined;
+            
             return $.event.fix(e);
         }
 
@@ -168,14 +179,14 @@ describe('PanZoom specs', function () {
         });
 
         now += 40; // pretend that time passed
-        element.find('#WrappedElement').trigger(createTouchEvent('touchmove', [{pageX: 110, pageY: 100}]));
+        overlay.trigger(createTouchEvent('touchmove', [{pageX: 110, pageY: 100}]));
 
         expect($scope.panzoomModel.pan).toEqual({
             x: 10,
             y: 0
         });
 
-        element.find('#WrappedElement').trigger(createTouchEvent('touchend'));
+        overlay.trigger(createTouchEvent('touchend'));
 
         for (var i = 0; i < 10; i++) {
             $interval.flush(jQuery.fx.interval);

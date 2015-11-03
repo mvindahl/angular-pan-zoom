@@ -24,6 +24,17 @@ function ($document, PanZoomService) {
                         var zoomElementDOM = zoomElement.get(0);
                         var animationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame;
 
+                        var $overlay;
+                        var existing = $document.find('#PanZoomOverlay');
+                        
+                        if (existing.length === 0) {
+                            $overlay = $('<div id="PanZoomOverlay" style="position: absolute;'+
+            				' top: 0; left: 0; right: 0; bottom: 0; opacity: 0; display: none;"></div>');
+                            $document.find('body').append($overlay);
+                        } else {
+                        	$overlay = existing;
+                        }
+                        
                         var getCssScale = function (zoomLevel) {
                             return Math.pow($scope.config.scalePerZoomLevel, zoomLevel - $scope.config.neutralZoomLevel);
                         };
@@ -405,7 +416,7 @@ function ($document, PanZoomService) {
                         var lastMouseEventTime;
                         var previousPosition;
 
-                        function onTouchStart($event) {
+                        $scope.onTouchStart = function($event) {
                             $event.preventDefault();
 
                             if ($event.originalEvent.touches.length === 1) {
@@ -430,11 +441,11 @@ function ($document, PanZoomService) {
                                     length: x * x + y * y
                                 };
                             }
-                        }
+                        };
                         
                         
-                        function onTouchMove($event) {
-                            $event.preventDefault();
+                        $scope.onTouchMove = function($event) {
+                        	$event.preventDefault();
 
                             if ($event.originalEvent.touches.length === 1) {
                                 // single touch, emulate mouse move
@@ -477,17 +488,12 @@ function ($document, PanZoomService) {
                                     length: length
                                 };
                             }
-                        }
+                        };
 
-                        function onTouchEnd($event) {
+                        $scope.onTouchEnd = function($event) {
                             $scope.onMouseup($event);
-                        }
+                        };
 
-                        $element.on('touchstart', onTouchStart);
-                        $element.on('touchend', onTouchEnd);
-                        $element.on('touchmove', onTouchMove);
-                        
-                     
                         $scope.onMousedown = function ($event) {
                             if ($scope.config.panOnClickDrag) {
                                 previousPosition = {
@@ -498,9 +504,12 @@ function ($document, PanZoomService) {
                                 $scope.dragging = true;
                                 $scope.model.isPanning = false;
                                 $document.on('mousemove', $scope.onMousemove);
-                                $document.on('mouseup', $scope.onMouseup);
-                                                                
+                                $document.on('mouseup', $scope.onMouseup);	
+                                $document.on('touchend', $scope.onTouchEnd);
+                                $document.on('touchmove', $scope.onTouchMove);
                             }
+                            
+                            return false;
                         };
                         var pan = function (delta) {
                             delta.x = delta.x || 0;
@@ -512,6 +521,9 @@ function ($document, PanZoomService) {
                         };
 
                         $scope.onMousemove = function ($event) {
+                    		$event.preventDefault();
+                    		$event.stopPropagation();
+                        	
                             var now = jQuery.now();
                             var timeSinceLastMouseEvent = (now - lastMouseEventTime) / 1000;
                             $scope.hasPanned = true;
@@ -521,6 +533,15 @@ function ($document, PanZoomService) {
                                 y: $event.pageY - previousPosition.y
                             };
                             pan(dragDelta);
+                            
+                            if (!$scope.model.isPanning) {
+                            	/*This will improve the performance, 
+                            	 *because the browser stop evaluating hits against the elements displayed inside the pan zoom view.
+                            	 *Besides this, mouseevents will not be send to any other elements, 
+                            	 *this prevents issues like selecting elements while dragging. */
+                                $overlay.css('display', 'block');
+                            }
+                            
                             $scope.model.isPanning = true;
                             
 
@@ -556,7 +577,12 @@ function ($document, PanZoomService) {
                             wakeupAnimationTick();
 
                             $document.off('mousemove', $scope.onMousemove);
-                            $document.off('mouseup', $scope.onMouseup);
+                            $document.off('mouseup', $scope.onMouseup);	
+                            $document.off('touchend', $scope.onTouchEnd);
+                            $document.off('touchmove', $scope.onTouchMove);
+                            
+                            //Set the overlay to noneblocking again:
+                            $overlay.css('display', 'none');
                         };
 
                         $scope.onMouseleave = function () {
@@ -589,7 +615,7 @@ function ($document, PanZoomService) {
                                 }
                             }
                         };
-
+                     	
                         // create public API
                         api = {
                             model: $scope.model,
@@ -609,6 +635,10 @@ function ($document, PanZoomService) {
                     if (scope.elementId) {
                         PanZoomService.registerAPI(scope.elementId, api);
                     }
+                    
+                    element.on('touchstart', function(e) {
+                    	scope.onTouchStart(e);
+                    });
                 },
                 template: '<div class="pan-zoom-frame" ng-dblclick="onDblClick($event)" ng-mousedown="onMousedown($event)"' +
                     ' msd-wheel="onMouseWheel($event, $delta, $deltaX, $deltaY)"' +
