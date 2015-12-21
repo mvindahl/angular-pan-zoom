@@ -231,42 +231,4 @@ describe('PanZoom specs', function () {
             _this.fail(Error('Failed to unregister API'));
         });
     });
-
-    it('should unregister its tick listener when directive is removed from page', function () {
-        var element = angular.element('<div ng-if="includeDirective"><panzoom id="PanZoomElementId" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom></div>');
-        $compile(element)($scope);
-        $scope.includeDirective = true;
-        $scope.$digest();
-
-        PanZoomService.getAPI('PanZoomElementId').then(function (api) {
-            expect(timerId).not.toBeDefined();
-            api.zoomIn(); // some arbitrary action which starts the animation tick
-            expect(timerId).toBeDefined();
-
-            $scope.includeDirective = false;
-            $scope.$digest();
-            $interval.flush(jQuery.fx.interval); // at least one tick needs to pass before the tick is unregistered
-
-            expect(timerId).toBeNull(); // i.e. the native tick loop has stopped
-        });
-
-    });
-
-    it('should not keep a tick listener when not in use', function () {
-        var element = angular.element('<panzoom id="PanZoomElementId" config="panzoomConfig" model="panzoomModel" style="width:800px; height: 600px"></panzoom>');
-        $compile(element)($scope);
-        $scope.$digest();
-
-        expect(timerId).toBeNull(); // the native tick loop has not been started
-
-        PanZoomService.getAPI('PanZoomElementId').then(function (api) {
-            api.zoomIn();
-
-            expect(timerId).toBeDefined(); // the native tick loop has been started for the duration of the zoom
-
-            $interval.flush(500); // wait for zoom animation to complete
-
-            expect(timerId).toBeNull(); // it's gone again
-        });
-    });
 });
