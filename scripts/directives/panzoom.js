@@ -60,6 +60,9 @@ function ($document, PanZoomService) {
                         $scope.config.initialPanX = $scope.config.initialPanX !== undefined ? $scope.config.initialPanX  : 0;
                         $scope.config.initialPanY = $scope.config.initialPanY || 0;
                         $scope.config.keepInBounds = $scope.config.keepInBounds ? $scope.config.keepInBounds : false;
+                        if ($scope.config.keepInBounds && $scope.config.neutralZoomLevel !== 0) {
+                            console.warn('You have set keepInBounds to true and neutralZoomLevel to ' + $scope.config.neutralZoomLevel + '. Be aware that the zoom level cannot below ' + $scope.config.neutralZoomLevel);
+                        }
                         $scope.config.keepInBoundsHardness = $scope.config.keepInBoundsHardness !== undefined ? $scope.config.keepInBoundsHardness : 0.5;
                         $scope.config.keepInBoundsDragPullback = $scope.config.keepInBoundsDragPullback !== undefined ? $scope.config.keepInBoundsDragPullback : 0.7;
 
@@ -202,7 +205,8 @@ function ($document, PanZoomService) {
                             }
 
                             // keep in bounds
-                            newZoomLevel = Math.max(0, newZoomLevel);
+                            var minimumAllowedZoomLevel = $scope.config.keepInBounds ? $scope.config.neutralZoomLevel : 0;
+                            newZoomLevel = Math.max(minimumAllowedZoomLevel, newZoomLevel);
                             newZoomLevel = Math.min($scope.config.zoomLevels - 1, newZoomLevel);
 
                             var deltaZoomLevel = newZoomLevel - $scope.base.zoomLevel;
@@ -331,10 +335,6 @@ function ($document, PanZoomService) {
         
                                     var topLeftCornerView = getViewPosition({ x: 0, y: 0 });
                                     var bottomRightCornerView = getViewPosition({ x: viewportWidth, y: viewportHeight });
-        
-                                    if (viewportWidth > bottomRightCornerView.x - topLeftCornerView.x || viewportHeight > bottomRightCornerView.y - topLeftCornerView.y) {
-                                        delete $scope.zoomAnimation;
-                                    }
         
                                     if (!$scope.dragging) {
                                         if (topLeftCornerView.x < 0) {
