@@ -118,11 +118,31 @@ The config object:
 May be used to pass configuration options to the panzoom directive. The directive will fill
 in any "blanks" with default values.
 
-For a list of configuration keys and values you may inspect the object one you get it back.
-
 The config object is not intended to be modified once initialized.
 
-[TBD: List options and explanations here]
+The following config object attributes are supported:
+
+Name                                | Type      | Default           | Description
+----------------------------------- | --------- | ----------------- | -----------
+zoomLevels                          | number    | 5                 | Number of discrete zoom levels, each one representing a scale.
+neutralZoomLevel                    | number    | 2                 | The zoom level at which the centents render at 1:1 scale
+scalePerZoomLevel                   | number    | 2.0               | The difference in actual scale between two adjacent zoom levels.
+initialZoomLevel                    | number    | neutralZoomLevel  | The initially selected zoom level
+initialPanX                         | number    | 0                 | The initial pan in the horizontal direction
+initialPanY                         | number    | 0                 | The initial pan in the vertical direction
+zoomToFitZoomLevelFactor            | number    | 0.95              | A number to indicate how closely zoom to fit will work. 1.0 is perfect fit, lowering the number will reveal a bit of the surrounding contents 
+zoomOnDoubleClick                   | boolean   | true              | Enable or disable zoom in on double click
+zoomButtonIncrement                 | number    | 1.0               | The amount of zoom levels to zoom on double click
+zoomStepDuration                    | number    | 0.2               | Amount of seconds to animate between two adjacent zoom levels
+disableZoomAnimation                | boolean   | false             | Set to true to disable the animation while zooming. It will be more chunky but will consule less CPU resources.
+zoomOnMouseWheel                    | boolean   | true              | Enable or disable zoom in/out on mouse wheel
+invertMouseWheel                    | boolean   | false             | Invert the behaviour of the mouse wheel (or two finger trackpad gesture)
+friction                            | number    | 10.0              | Constant which controls the friction when dragging and then letting go. The higher the number, the more quickly the animation will come to a stop.
+haltSpeed                           | number    | 100.0             | Constant which controls when the pan animation has slowed down enough to be terminated. The lower the number, the longer time it will run.
+panOnClickDrag                      | boolean   | true              | Enable or disable pan on clicking and dragging the mouse
+modelChangedCallback                | function  | undefined         | Pass a function to receive events when the model changes. The model will be passed to the function.
+useHardwareAcceleration             | boolean   | false             | Use translate3d for panning instead of using standard CSS styles 'left' and 'top'. This is intended to trigger hardware acceleration and may increase the speed greatly. In future versions, this may be set to true as default.
+chromeUseTransform                  | boolean   | false             | Cause Chrome to use CSS transform instead of CSS zoom. Enable if you use nested SVG and see performance problems in Chrome.
 
 
 The model object:

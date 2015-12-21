@@ -52,8 +52,7 @@ function ($document, PanZoomService) {
                         $scope.config.haltSpeed = $scope.config.haltSpeed || 100.0;
                         $scope.config.scalePerZoomLevel = $scope.config.scalePerZoomLevel || 2;
                         $scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
-                        $scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
-                        $scope.config.modelChangedCallback = $scope.config.modelChangedCallback || function () {};
+                        $scope.config.modelChangedCallback = $scope.config.modelChangedCallback || undefined;
                         $scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
                         $scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement || 1.0;
                         $scope.config.useHardwareAcceleration = $scope.config.useHardwareAcceleration || false;
@@ -335,7 +334,9 @@ function ($document, PanZoomService) {
 
                                         $scope.zoomAnimation = undefined;
 
-                                        $scope.config.modelChangedCallback($scope.model);
+                                        if ($scope.config.modelChangedCallback) {                                        
+                                            $scope.config.modelChangedCallback($scope.model);
+                                        }
                                     }
                                 }
 
@@ -356,7 +357,9 @@ function ($document, PanZoomService) {
                                         if (speed < $scope.config.haltSpeed) {
                                             $scope.panVelocity = undefined;
 
-                                            $scope.config.modelChangedCallback($scope.model);
+                                            if ($scope.config.modelChangedCallback) {                                        
+                                                $scope.config.modelChangedCallback($scope.model);
+                                            }
 
                                             break;
                                         }
