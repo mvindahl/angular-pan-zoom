@@ -143,7 +143,7 @@ panOnClickDrag                      | boolean   | true              | Enable or 
 modelChangedCallback                | function  | undefined         | Pass a function to receive events when the model changes. The model will be passed to the function.
 useHardwareAcceleration             | boolean   | false             | Use translate3d for panning instead of using standard CSS styles 'left' and 'top'. This is intended to trigger hardware acceleration and may increase the speed greatly. In future versions, this may be set to true as default.
 chromeUseTransform                  | boolean   | false             | Cause Chrome to use CSS transform instead of CSS zoom. Enable if you use nested SVG and see performance problems in Chrome.
-
+initialZoomToFit                    | rectangle | undefined         | When defined, will initially zoom to fit the given rectangle (see API for explanation of zoom to fit). This overrides the initialZoomLevel, initialPanX, and initialPanY values.
 
 The model object:
 -----------------

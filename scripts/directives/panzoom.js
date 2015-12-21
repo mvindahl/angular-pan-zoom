@@ -45,29 +45,28 @@ function ($document, PanZoomService) {
 
                         // initialize models. Use passed properties when available, otherwise revert to defaults
                         // NOTE: all times specified in seconds, all distances specified in pixels                        
-                        $scope.config.disableZoomAnimation = $scope.config.disableZoomAnimation || false;
-                        $scope.config.zoomLevels = $scope.config.zoomLevels || 5;
-                        $scope.config.neutralZoomLevel = $scope.config.neutralZoomLevel || 2;
-                        $scope.config.friction = $scope.config.friction || 10.0;
-                        $scope.config.haltSpeed = $scope.config.haltSpeed || 100.0;
-                        $scope.config.scalePerZoomLevel = $scope.config.scalePerZoomLevel || 2;
-                        $scope.config.zoomStepDuration = $scope.config.zoomStepDuration || 0.2;
-                        $scope.config.modelChangedCallback = $scope.config.modelChangedCallback || undefined;
-                        $scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor || 0.95;
-                        $scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement || 1.0;
-                        $scope.config.useHardwareAcceleration = $scope.config.useHardwareAcceleration || false;
+                        $scope.config.disableZoomAnimation = $scope.config.disableZoomAnimation !== undefined ? $scope.config.disableZoomAnimation : false;
+                        $scope.config.zoomLevels = $scope.config.zoomLevels !== undefined ? $scope.config.zoomLevels : 5;
+                        $scope.config.neutralZoomLevel = $scope.config.neutralZoomLevel !== undefined ? $scope.config.neutralZoomLevel : 2;
+                        $scope.config.friction = $scope.config.friction !== undefined ? $scope.config.friction : 10.0;
+                        $scope.config.haltSpeed = $scope.config.haltSpeed !== undefined ? $scope.config.haltSpeed : 100.0;
+                        $scope.config.scalePerZoomLevel = $scope.config.scalePerZoomLevel !== undefined ? $scope.config.scalePerZoomLevel : 2;
+                        $scope.config.zoomStepDuration = $scope.config.zoomStepDuration !== undefined ? $scope.config.zoomStepDuration : 0.2;
+                        $scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor !== undefined ? $scope.config.zoomToFitZoomLevelFactor : 0.95;
+                        $scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement !== undefined ? $scope.config.zoomButtonIncrement : 1.0;
+                        $scope.config.useHardwareAcceleration = $scope.config.useHardwareAcceleration !== undefined ? $scope.config.useHardwareAcceleration : false;
                         
-                        $scope.config.initialZoomLevel = $scope.config.initialZoomLevel || $scope.config.neutralZoomLevel;
-                        $scope.config.initialPanX = $scope.config.initialPanX || 0;
+                        $scope.config.initialZoomLevel = $scope.config.initialZoomLevel !== undefined ? $scope.config.initialZoomLevel : $scope.config.neutralZoomLevel;
+                        $scope.config.initialPanX = $scope.config.initialPanX !== undefined ? $scope.config.initialPanX  : 0;
                         $scope.config.initialPanY = $scope.config.initialPanY || 0;
 
                         $scope.config.zoomOnDoubleClick = $scope.config.zoomOnDoubleClick !== undefined ? $scope.config.zoomOnDoubleClick : true;
                         $scope.config.zoomOnMouseWheel = $scope.config.zoomOnMouseWheel !== undefined ? $scope.config.zoomOnMouseWheel : true;
                         $scope.config.panOnClickDrag = $scope.config.panOnClickDrag !== undefined ? $scope.config.panOnClickDrag : true;
 
-                        $scope.config.invertMouseWheel = $scope.config.invertMouseWheel || false;
+                        $scope.config.invertMouseWheel = $scope.config.invertMouseWheel !== undefined ? $scope.config.invertMouseWheel : false;
 
-                        $scope.config.chromeUseTransform = $scope.config.chromeUseTransform || false;
+                        $scope.config.chromeUseTransform = $scope.config.chromeUseTransform ? $scope.config.chromeUseTransform : false;
 
 
                         var calcZoomToFit = function (rect) {
