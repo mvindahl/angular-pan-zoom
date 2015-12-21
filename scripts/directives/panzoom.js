@@ -63,7 +63,7 @@ function ($document, PanZoomService) {
                         if ($scope.config.keepInBounds && $scope.config.neutralZoomLevel !== 0) {
                             console.warn('You have set keepInBounds to true and neutralZoomLevel to ' + $scope.config.neutralZoomLevel + '. Be aware that the zoom level cannot below ' + $scope.config.neutralZoomLevel);
                         }
-                        $scope.config.keepInBoundsHardness = $scope.config.keepInBoundsHardness !== undefined ? $scope.config.keepInBoundsHardness : 0.5;
+                        $scope.config.keepInBoundsRestoreForce = $scope.config.keepInBoundsRestoreForce !== undefined ? $scope.config.keepInBoundsRestoreForce : 0.5;
                         $scope.config.keepInBoundsDragPullback = $scope.config.keepInBoundsDragPullback !== undefined ? $scope.config.keepInBoundsDragPullback : 0.7;
 
                         $scope.config.zoomOnDoubleClick = $scope.config.zoomOnDoubleClick !== undefined ? $scope.config.zoomOnDoubleClick : true;
@@ -337,20 +337,20 @@ function ($document, PanZoomService) {
                                     var bottomRightCornerView = getViewPosition({ x: viewportWidth, y: viewportHeight });
         
                                     if (!$scope.dragging) {
-                                        if (topLeftCornerView.x < 0) {
-                                            $scope.base.pan.x -= $scope.config.keepInBoundsHardness * topLeftCornerView.x;
+                                        if (topLeftCornerView.x > 0) {
+                                            $scope.base.pan.x -= $scope.config.keepInBoundsRestoreForce * topLeftCornerView.x;
                                         }
 
-                                        if (topLeftCornerView.y < 0) {
-                                            $scope.base.pan.y -= $scope.config.keepInBoundsHardness * topLeftCornerView.y;
+                                        if (topLeftCornerView.y > 0) {
+                                            $scope.base.pan.y -= $scope.config.keepInBoundsRestoreForce * topLeftCornerView.y;
                                         }
 
-                                        if (bottomRightCornerView.x > viewportWidth) {
-                                            $scope.base.pan.x -= $scope.config.keepInBoundsHardness * (bottomRightCornerView.x - viewportWidth);
+                                        if (bottomRightCornerView.x < viewportWidth) {
+                                            $scope.base.pan.x -= $scope.config.keepInBoundsRestoreForce * (bottomRightCornerView.x - viewportWidth);
                                         }
 
-                                        if (bottomRightCornerView.y > viewportHeight) {
-                                            $scope.base.pan.y -= $scope.config.keepInBoundsHardness * (bottomRightCornerView.y - viewportHeight);
+                                        if (bottomRightCornerView.y < viewportHeight) {
+                                            $scope.base.pan.y -= $scope.config.keepInBoundsRestoreForce * (bottomRightCornerView.y - viewportHeight);
                                         }
                                     }
 
@@ -561,24 +561,24 @@ function ($document, PanZoomService) {
                             if ($scope.config.keepInBounds) {
                                 var viewportHeight = zoomElement.children().height();
                                 var viewportWidth = zoomElement.children().width();
-    
+
                                 var topLeftCornerView = getViewPosition({ x: 0, y: 0 });
                                 var bottomRightCornerView = getViewPosition({ x: viewportWidth, y: viewportHeight });
     
-                                if (topLeftCornerView.x < 0 && dragDelta.x < 0) {
-                                    dragDelta.x *= Math.min(Math.pow(-topLeftCornerView.x, -$scope.config.keepInBoundsDragPullback), 1);
+                                if (topLeftCornerView.x > 0 && dragDelta.x > 0) {
+                                    dragDelta.x *= Math.min(Math.pow(topLeftCornerView.x, -$scope.config.keepInBoundsDragPullback), 1);
                                 }
 
-                                if (topLeftCornerView.y < 0 && dragDelta.y < 0) {
-                                    dragDelta.y *= Math.min(Math.pow(-topLeftCornerView.y, -$scope.config.keepInBoundsDragPullback), 1);
+                                if (topLeftCornerView.y > 0 && dragDelta.y > 0) {
+                                    dragDelta.y *= Math.min(Math.pow(topLeftCornerView.y, -$scope.config.keepInBoundsDragPullback), 1);
                                 }
 
-                                if (bottomRightCornerView.x > viewportWidth && dragDelta.x > 0) {
-                                     dragDelta.x *= Math.min(Math.pow(bottomRightCornerView.x - viewportWidth, -$scope.config.keepInBoundsDragPullback), 1);
+                                if (bottomRightCornerView.x < viewportWidth && dragDelta.x < 0) {
+                                     dragDelta.x *= Math.min(Math.pow(viewportWidth - bottomRightCornerView.x, -$scope.config.keepInBoundsDragPullback), 1);
                                 }
 
-                                if (bottomRightCornerView.y > viewportHeight && dragDelta.y > 0) {
-                                     dragDelta.y *= Math.min(Math.pow(bottomRightCornerView.y - viewportHeight, -$scope.config.keepInBoundsDragPullback), 1);
+                                if (bottomRightCornerView.y < viewportHeight && dragDelta.y < 0) {
+                                     dragDelta.y *= Math.min(Math.pow(viewportHeight - bottomRightCornerView.y, -$scope.config.keepInBoundsDragPullback), 1);
                                 }
                             }
                             
