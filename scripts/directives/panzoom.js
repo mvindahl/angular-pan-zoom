@@ -377,7 +377,7 @@ function ($document, PanZoomService) {
                                     }
                                 }
 
-                                if ($scope.panVelocity) {
+                                if ($scope.panVelocity && !$scope.dragging) {
                                     // prevent overshooting if delta time is large for some reason. We apply the simple solution of
                                     // slicing delta time into smaller pieces and applying each one
                                     while (deltaTime > 0) {
