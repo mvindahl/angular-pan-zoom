@@ -3,6 +3,7 @@
  @license: MIT
  Github: https://github.com/mvindahl/angular-pan-zoom
 */
+/* globals console */
 angular.module('panzoom', ['monospaced.mousewheel'])
     .directive('panzoom', ['$document', 'PanZoomService',
 function ($document, PanZoomService) {
@@ -54,19 +55,25 @@ function ($document, PanZoomService) {
                         $scope.config.haltSpeed = $scope.config.haltSpeed !== undefined ? $scope.config.haltSpeed : 100.0;
                         $scope.config.scalePerZoomLevel = $scope.config.scalePerZoomLevel !== undefined ? $scope.config.scalePerZoomLevel : 2;
                         $scope.config.zoomStepDuration = $scope.config.zoomStepDuration !== undefined ? $scope.config.zoomStepDuration : 0.2;
-                        $scope.config.zoomToFitZoomLevelFactor = $scope.config.zoomToFitZoomLevelFactor !== undefined ? $scope.config.zoomToFitZoomLevelFactor : 0.95;
+                        $scope.config.zoomToFitZoomLevelFactor =
+                            $scope.config.zoomToFitZoomLevelFactor !== undefined ? $scope.config.zoomToFitZoomLevelFactor : 0.95;
                         $scope.config.zoomButtonIncrement = $scope.config.zoomButtonIncrement !== undefined ? $scope.config.zoomButtonIncrement : 1.0;
-                        $scope.config.useHardwareAcceleration = $scope.config.useHardwareAcceleration !== undefined ? $scope.config.useHardwareAcceleration : false;
+                        $scope.config.useHardwareAcceleration =
+                            $scope.config.useHardwareAcceleration !== undefined ? $scope.config.useHardwareAcceleration : false;
                         
-                        $scope.config.initialZoomLevel = $scope.config.initialZoomLevel !== undefined ? $scope.config.initialZoomLevel : $scope.config.neutralZoomLevel;
+                        $scope.config.initialZoomLevel =
+                            $scope.config.initialZoomLevel !== undefined ? $scope.config.initialZoomLevel : $scope.config.neutralZoomLevel;
                         $scope.config.initialPanX = $scope.config.initialPanX !== undefined ? $scope.config.initialPanX  : 0;
                         $scope.config.initialPanY = $scope.config.initialPanY || 0;
                         $scope.config.keepInBounds = $scope.config.keepInBounds ? $scope.config.keepInBounds : false;
                         if ($scope.config.keepInBounds && $scope.config.neutralZoomLevel !== 0) {
-                            console.warn('You have set keepInBounds to true and neutralZoomLevel to ' + $scope.config.neutralZoomLevel + '. Be aware that the zoom level cannot below ' + $scope.config.neutralZoomLevel);
+                            console.warn('You have set keepInBounds to true and neutralZoomLevel to ' + $scope.config.neutralZoomLevel +
+                                         '. Be aware that the zoom level cannot below ' + $scope.config.neutralZoomLevel);
                         }
-                        $scope.config.keepInBoundsRestoreForce = $scope.config.keepInBoundsRestoreForce !== undefined ? $scope.config.keepInBoundsRestoreForce : 0.5;
-                        $scope.config.keepInBoundsDragPullback = $scope.config.keepInBoundsDragPullback !== undefined ? $scope.config.keepInBoundsDragPullback : 0.7;
+                        $scope.config.keepInBoundsRestoreForce =
+                            $scope.config.keepInBoundsRestoreForce !== undefined ? $scope.config.keepInBoundsRestoreForce : 0.5;
+                        $scope.config.keepInBoundsDragPullback =
+                            $scope.config.keepInBoundsDragPullback !== undefined ? $scope.config.keepInBoundsDragPullback : 0.7;
 
                         $scope.config.zoomOnDoubleClick = $scope.config.zoomOnDoubleClick !== undefined ? $scope.config.zoomOnDoubleClick : true;
                         $scope.config.zoomOnMouseWheel = $scope.config.zoomOnMouseWheel !== undefined ? $scope.config.zoomOnMouseWheel : true;
