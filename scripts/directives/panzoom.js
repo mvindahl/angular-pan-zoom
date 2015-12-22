@@ -7,6 +7,8 @@ angular.module('panzoom', ['monospaced.mousewheel'])
     .directive('panzoom', ['$document', 'PanZoomService',
 function ($document, PanZoomService) {
             var api = {};
+            var viewportHeight;
+            var viewportWidth;            
 
             return {
                 restrict: 'E',
@@ -16,7 +18,7 @@ function ($document, PanZoomService) {
                     model: '='
                 },
                 controller: ['$scope', '$element',
-    function ($scope, $element) {
+                    function ($scope, $element) {
                         var frameElement = $element;
                         var panElement = $element.find('.pan-element');
                         var zoomElement = $element.find('.zoom-element');
@@ -136,9 +138,6 @@ function ($document, PanZoomService) {
                                 $scope.model.pan.y = $scope.base.pan.y + deltaT.y;
                                 
                                 if ($scope.config.keepInBounds) {
-                                    var viewportHeight = zoomElement.children().height();
-                                    var viewportWidth = zoomElement.children().width();
-        
                                     var topLeftCornerView = getViewPosition({ x: 0, y: 0 });
                                     var bottomRightCornerView = getViewPosition({ x: viewportWidth, y: viewportHeight });
         
@@ -401,9 +400,6 @@ function ($document, PanZoomService) {
                                 }
                                 
                                 if ($scope.config.keepInBounds && !$scope.dragging) {
-                                    var viewportHeight = zoomElement.children().height();
-                                    var viewportWidth = zoomElement.children().width();
-        
                                     var topLeftCornerView = getViewPosition({ x: 0, y: 0 });
                                     var bottomRightCornerView = getViewPosition({ x: viewportWidth, y: viewportHeight });
         
@@ -580,9 +576,6 @@ function ($document, PanZoomService) {
                             };
                             
                             if ($scope.config.keepInBounds) {
-                                var viewportHeight = zoomElement.children().height();
-                                var viewportWidth = zoomElement.children().width();
-
                                 var topLeftCornerView = getViewPosition({ x: 0, y: 0 });
                                 var bottomRightCornerView = getViewPosition({ x: viewportWidth, y: viewportHeight });
     
@@ -700,6 +693,9 @@ function ($document, PanZoomService) {
         }],
                 link: function (scope, element, attrs) {
                     scope.elementId = attrs.id;
+
+                    viewportHeight = element.find('.zoom-element').children().height();
+                    viewportWidth = element.find('.zoom-element').children().width();
 
                     if (scope.elementId) {
                         PanZoomService.registerAPI(scope.elementId, api);
