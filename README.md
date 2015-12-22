@@ -144,6 +144,10 @@ modelChangedCallback                | function  | undefined         | Pass a fun
 useHardwareAcceleration             | boolean   | false             | Use translate3d for panning instead of using standard CSS styles 'left' and 'top'. This is intended to trigger hardware acceleration and may increase the speed greatly. In future versions, this may be set to true as default.
 chromeUseTransform                  | boolean   | false             | Cause Chrome to use CSS transform instead of CSS zoom. Enable if you use nested SVG and see performance problems in Chrome.
 initialZoomToFit                    | rectangle | undefined         | When defined, will initially zoom to fit the given rectangle (see API for explanation of zoom to fit). This overrides the initialZoomLevel, initialPanX, and initialPanY values.
+keepInBounds                        | boolean   | false             | When true, it will not be possible to pan the contents off the screen -- it will snap back when trying to do so -- and it will not be possible to zoom further out than the neutral zoom level.
+keepInBoundsRestoreForce            | number    | 0.5               | Constant to control how quickly the contents snap back in place after attempting to pan off bounds.
+keepInBoundsDragPullback            | number    | 0.7               | Constant to control the perceived force preventing dragging the contents off limits.
+
 
 The model object:
 -----------------
