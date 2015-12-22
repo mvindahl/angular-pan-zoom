@@ -537,6 +537,10 @@ function ($document, PanZoomService) {
                         };
 
                         $scope.onMousedown = function ($event) {
+                            if ($event.button !== 0) {
+                                return; // not left button
+                            }
+
                             if ($scope.config.panOnClickDrag) {
                                 previousPosition = {
                                     x: $event.pageX,
