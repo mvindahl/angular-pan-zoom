@@ -17,6 +17,10 @@ Get the code from github. Or simpler yet, use bower:
 ```
 bower install angular-pan-zoom
 ```
+Or NPM:
+```
+npm install angular-pan-zoom --save
+```
 
 Features:
 ---------
