@@ -212,8 +212,8 @@ function ($document, PanZoomService) {
                                 panElementDOM.style.webkitTransform = translate;  
                                 panElementDOM.style.mozTransform = translate;
                             } else {
-                                panElementDOM.style.left = $scope.model.pan.x;
-                                panElementDOM.style.top = $scope.model.pan.y;    
+                                panElementDOM.style.left = $scope.model.pan.x + 'px';
+                                panElementDOM.style.top = $scope.model.pan.y + 'px';    
                             }
                         };
 
