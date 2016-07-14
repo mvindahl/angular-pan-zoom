@@ -679,7 +679,7 @@ function ($document, PanZoomService) {
 
                                 if (sign < 0) {
                                     zoomIn(clickPoint);
-                                } else {
+                                } else if (sign > 0) {
                                     zoomOut(clickPoint);
                                 }
                             }
