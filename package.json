@@ -1,6 +1,6 @@
 {
     "name": "angular-pan-zoom",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "dependencies": {},
     "devDependencies": {
         "bower": "^1.3.12",
@@ -17,7 +17,7 @@
         "karma-ng-scenario": "~0.1",
         "karma-phantomjs-launcher": "~0.1",
         "karma-safari-launcher": "~0.1",
-        "node-sass": "^2.0.1",
+        "node-sass": "3.8.0",
         "uglify-js": "^2.4.16",
         "watch": "^0.14.0"
     },
@@ -28,7 +28,7 @@
         "start": "bower install && npm run build:js:watch & npm run build:css:watch & browser-sync start --server --files \"demo/*,build/*\" --startPath \"demo/demo.dev.html\"",
         "prebuild": "npm run lint && npm run test",
         "build": "npm run build:js && npm run build:js:minified && npm run build:css",
-        "build:js": "cat scripts/directives/*.js scripts/services/*.js | sed \"s/{VERSION}/$npm_package_version/g\" > build/panzoom.js",
+        "build:js": "mkdir -p build && cat scripts/directives/*.js scripts/services/*.js | sed \"s/{VERSION}/$npm_package_version/g\" > build/panzoom.js",
         "build:js:watch": "watch 'npm run build:js' scripts",
         "prebuild:js:minified": "npm run build:js",
         "build:js:minified": "uglifyjs build/panzoom.js --comments > build/panzoom.min.js",
