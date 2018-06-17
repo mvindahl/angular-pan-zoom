@@ -7,9 +7,16 @@ AngularJS directive for implementing pan and zoom on any DOM element
 
 [![Build Status](https://travis-ci.org/mvindahl/angular-pan-zoom.svg?branch=master)](https://travis-ci.org/mvindahl/angular-pan-zoom)
 
-NOTE: Migration from 0.9.0 to 1.0.0
------------------------------------
-The 1.0.0 release introduced a breaking change in how the panzoom widget publishes its API. Migration guide [here](https://github.com/mvindahl/angular-pan-zoom/wiki/Migrating-from-0.9.0-to-1.0.0)
+NOTE: Angular2 version has been released!
+-----------------------------------------
+TL;DR: If you're looking for pan/zoom with Angular2 support, I highly recommend that you have a look at [ng-panzoom2](https://github.com/KensingtonTech/ng2-panzoom
+).
+
+A bit longer explanation: This directive was written for Angular1 and I have not made any effort to migrate it to Angular2. I am very grateful that [Tim Underhay](https://github.com/KensingtonTech) has stepped in to correct this omission. What he did was basically salvage the good parts from angular-pan-zoom and make it work in Angular2, fixing the design along the way. I feel honored that someone with which I have no personal affiliation would go through this trouble to pull my somewhat dated code into 2018. I consider ng-panzoom2 to be the natural sucessor to angular-pan-zoom.
+
+My original angular-pan-zoom project will not go away but I expect it to become increasingly forgotten as the world moves away from Angular1. I haven't done any active development for years nor have I received any pull requests for some time. It has been fun to create a project that, though never huge, did make a small splash and was used by people around the world. I expect most of the world to have moved on by now.
+
+We now return to the original broadcast.
 
 Getting it:
 -----------
